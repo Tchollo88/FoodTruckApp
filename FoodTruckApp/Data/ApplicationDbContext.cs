@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using FoodTruckApp.Models;
 
+
 namespace FoodTruckApp.Data
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>
