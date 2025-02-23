@@ -1,11 +1,22 @@
-﻿namespace FoodTruckApp.Models.Menu
+﻿using System.ComponentModel.DataAnnotations;
+using FoodTruckApp.Models.WorkForce;
+using FoodTruckApp.Models.Menu;
+
+namespace FoodTruckApp.Models.Menu
 {
     public class Special
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal Discount { get; set; }
+        [Key]
+        public int Special_ID { get; set; }
+
+        [Required]
+        public string Name { get; set; } = string.Empty;
+        [Required]
+        public decimal Discount { get; set; } = decimal.MinValue;
+        [Required]
         public DateOnly StartDate { get; set; }
+        [Required]
         public DateOnly EndDate { get; set; }
+
     }
 }

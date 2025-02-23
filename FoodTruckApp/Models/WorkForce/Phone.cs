@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FoodTruckApp.Models.WorkForce;
+using FoodTruckApp.Models.Menu;
 
-namespace FoodTruckApp.Models
+namespace FoodTruckApp.Models.WorkForce
 {
     public class Phone
     {
@@ -13,10 +15,5 @@ namespace FoodTruckApp.Models
 
         [Required]
         public string Type { get; set; } = string.Empty; // e.g., Mobile, Home, Work
-
-        [Required, ForeignKey("User")]
-        public int User_ID { get; set; }
-
-        public virtual User? User { get; set; }
     }
 }

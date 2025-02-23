@@ -1,13 +1,27 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using FoodTruckApp.Models.WorkForce;
+using FoodTruckApp.Models.Menu;
 
 namespace FoodTruckApp.Models.Menu
 {
     public class Item
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Category { get; set; }
-        public string Description { get; set; }
-        //public Blob Image { get; set; }
+        [Key]
+        public int Item_ID { get; set; }
+
+        [Required]
+        public string Name { get; set; } = string.Empty;
+
+        [Required, Column(TypeName = "decimal(10,2)")]
+        public decimal Price { get; set; }
+
+        public string Description { get; set; } = string.Empty;
+
+        [Required]
+        public string Category { get; set; } = string.Empty;
+
+
     }
 }
