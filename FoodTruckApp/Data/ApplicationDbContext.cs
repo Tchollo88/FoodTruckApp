@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using FoodTruckApp.Models.Menu;
-using FoodTruckApp.Models.WorkForce;
+using FoodTruckApp.Models.Client;
 
 
 namespace FoodTruckApp.Data
@@ -12,14 +12,7 @@ namespace FoodTruckApp.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
-        public new DbSet<User> Users { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<Info> Info { get; set; }
-        public new DbSet<Role> Roles { get; set; }
-        public DbSet<Access> Access { get; set; }
-        public DbSet<Phone> Phones { get; set; } 
-        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<Item> Items { get; set; }

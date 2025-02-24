@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\MenuControllers\" />
-    <Folder Include="Controllers\WorkForceControllers\" />
+    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
 </Project>
