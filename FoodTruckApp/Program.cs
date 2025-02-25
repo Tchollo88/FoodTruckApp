@@ -31,10 +31,16 @@ else
 }
 
 app.UseRouting();
+
 app.UseAuthorization();
+
+app.MapStaticAssets();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
 
-app.MapRazorPages();
+app.MapRazorPages()
+   .WithStaticAssets();
 app.Run();
