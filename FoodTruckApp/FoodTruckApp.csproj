@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\MenuControllers\**" />
+    <Compile Remove="Data\Migrations\**" />
+    <Content Remove="Controllers\MenuControllers\**" />
+    <Content Remove="Data\Migrations\**" />
+    <EmbeddedResource Remove="Controllers\MenuControllers\**" />
+    <EmbeddedResource Remove="Data\Migrations\**" />
+    <None Remove="Controllers\MenuControllers\**" />
+    <None Remove="Data\Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
 
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.2" />
@@ -26,8 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\MenuControllers\" />
-    <Folder Include="Data\Migrations\" />
+    <ProjectReference Include="..\FoodTruckCustomer\FoodTruckCustomer.csproj" />
   </ItemGroup>
 
 </Project>
