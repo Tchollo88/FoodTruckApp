@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using FoodTruckCustomer.Models.Client;
-using food
+
 
 
 namespace FoodTruckCustomer.Models.Menu
