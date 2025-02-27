@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FoodTruckApp.Models.Menu;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FoodTruckApp.Models.Menu
+namespace FoodTruckApp.Controllers
 {
     public class MenuController : Controller
     {
