@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Repository.Models.Menu;
 
-namespace Repository
+namespace Repository.Data
 {
     public class ItemRepository : IItemRepository
     {

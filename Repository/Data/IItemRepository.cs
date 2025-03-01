@@ -1,4 +1,6 @@
-﻿namespace Repository
+﻿using Repository.Models.Menu;
+
+namespace Repository.Data
 {
     public interface IItemRepository
     {

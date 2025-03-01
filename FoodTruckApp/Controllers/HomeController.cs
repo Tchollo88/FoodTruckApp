@@ -1,6 +1,7 @@
 using System.Diagnostics;
-using FoodTruckApp.Models;
+using Repository.Models;
 using Microsoft.AspNetCore.Mvc;
+using FoodTruckCustomer.Models;
 
 namespace FoodTruckApp.Controllers
 {

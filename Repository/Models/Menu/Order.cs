@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FoodTruckCustomer.Models.Menu
+namespace Repository.Models.Menu
 {
     public class Order
     {
@@ -8,7 +8,7 @@ namespace FoodTruckCustomer.Models.Menu
         public int Order_ID { get; set; }
 
         [Required]
-        public virtual ICollection<Item>? Items { get; set; } = new List<Item>();
+        public virtual ICollection<MenuItem>? MenuItems { get; set; } = new List<MenuItem>();
         public virtual ICollection<Special>? Specials { get; set; } = new List<Special>();
 
         [Required]

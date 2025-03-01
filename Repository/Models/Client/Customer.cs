@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using FoodTruckApp.Models.Client;
-using FoodTruckApp.Models.Menu;
+using Repository.Models.Menu;
 
-namespace FoodTruckApp.Models.Client
+namespace Repository.Models.Client
 {
     public class Customer
     {

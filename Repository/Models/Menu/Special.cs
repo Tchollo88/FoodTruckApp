@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FoodTruckApp.Models.Client;
-using FoodTruckApp.Models.Menu;
+using Repository.Models.Client;
 
-namespace FoodTruckApp.Models.Menu
+namespace Repository.Models.Menu
 {
     public class Special
     {

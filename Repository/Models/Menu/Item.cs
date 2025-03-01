@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FoodTruckCustomer.Models.Menu
+namespace Repository.Models.Menu
 {
     public class Item
     {
@@ -18,5 +19,7 @@ namespace FoodTruckCustomer.Models.Menu
 
         [Required]
         public string Category { get; set; } = string.Empty;
+
+
     }
 }
