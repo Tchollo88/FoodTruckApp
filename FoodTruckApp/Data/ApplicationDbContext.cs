@@ -11,7 +11,7 @@ namespace FoodTruckApp.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
-
+        
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }

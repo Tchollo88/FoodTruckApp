@@ -1,6 +1,7 @@
 using FoodTruckApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Repository;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,17 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<FoodTruckApp.Data.ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>() // Enables Role Management
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<FoodTruckApp.Data.ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IItemRepository, ItemRepository>();
 
 var app = builder.Build();
 
