@@ -43,15 +43,15 @@ namespace FoodTruckApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddNewItem(string type, string itemName, int price, string path)
+        public IActionResult AddNewItem(string itemName, int price, string path)
         {
             if (HttpContext.Request.Cookies.ContainsKey("admin"))
             {
 
-                Item newItem = new Item { FoodType = type, Name = itemName, Price = price, ImagePath = path };
+                Item newItem = new Item {Name = itemName, Price = price, ImagePath = path };
 
                 ItemRepository repo = new ItemRepository(db);
-                repo.addItem(newItem);
+                repo.AddItemAsync(newItem);
 
                 return View("AddItem", "Item Added Successfully!!!");
             }
