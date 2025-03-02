@@ -1,83 +1,75 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Data;
+using Repository.Models.Client;
+using Repository.Models.Menu;
 
 namespace FoodTruckApp.Controllers
 {
     public class Admin : Controller
     {
-        // GET: Admin
-        public ActionResult Index()
-        {
-            return View();
-        }
+        private ApplicationDbContext db = new ApplicationDbContext(Db);
 
-        // GET: Admin/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        public ApplicationDbContext Db { get => db; set => db = value; }
 
-        // GET: Admin/Create
-        public ActionResult Create()
+        public IActionResult Index()
         {
-            return View();
-        }
-
-        // POST: Admin/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            if (HttpContext.Request.Cookies.ContainsKey("admin"))
             {
                 return View();
             }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
         }
 
-        // GET: Admin/Edit/5
-        public ActionResult Edit(int id)
+        public IActionResult Logout()
+        {
+            HttpContext.Response.Cookies.Delete("admin");
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AddItem()
+        {
+            if (HttpContext.Request.Cookies.ContainsKey("admin"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult AddNewItem(string type, string itemName, int price, string path)
+        {
+            if (HttpContext.Request.Cookies.ContainsKey("admin"))
+            {
+
+                Item newItem = new Item { FoodType = type, Name = itemName, Price = price, ImagePath = path };
+
+                ItemRepository repo = new ItemRepository(db);
+                repo.addItem(newItem);
+
+                return View("AddItem", "Item Added Successfully!!!");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+        }
+
+        public IActionResult AllUsers()
         {
             return View();
         }
 
-        // POST: Admin/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public List<Customer> getAllUsers()
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Admin/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Admin/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            Console.WriteLine("Retrieving Customer List...");
+            return db.Customers.ToList();
         }
     }
 }
