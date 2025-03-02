@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FoodTruckCustomer.Models.Menu
+namespace Repository.Models.Menu
 {
     public class Purchase
     {

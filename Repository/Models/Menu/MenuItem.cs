@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using FoodTruckApp.Models.Client;
-using FoodTruckApp.Models.Menu;
 
 
-namespace FoodTruckApp.Models.Menu
+namespace Repository.Models.Menu
 {
     public class MenuItem
     {

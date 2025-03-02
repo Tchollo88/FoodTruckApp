@@ -9,13 +9,9 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\MenuControllers\**" />
-    <Compile Remove="Data\Migrations\**" />
     <Content Remove="Controllers\MenuControllers\**" />
-    <Content Remove="Data\Migrations\**" />
     <EmbeddedResource Remove="Controllers\MenuControllers\**" />
-    <EmbeddedResource Remove="Data\Migrations\**" />
     <None Remove="Controllers\MenuControllers\**" />
-    <None Remove="Data\Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +30,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 
 	

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using FoodTruckApp.Models.Client;
-using FoodTruckApp.Models.Menu;
+using Repository.Models.Client;
 
-namespace FoodTruckApp.Models.Menu
+namespace Repository.Models.Menu
 {
     public class Receipt
     {
