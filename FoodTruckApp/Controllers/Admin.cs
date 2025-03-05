@@ -1,14 +1,21 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Data;
 
 namespace FoodTruckApp.Controllers
 {
     public class Admin : Controller
     {
-        // GET: Admin
-        public ActionResult Index()
+        private readonly IItemRepository _ItemRepository;
+        public Admin(IItemRepository itemRepository)
         {
-            return View();
+            _ItemRepository = itemRepository;
+        }
+        // GET: Admin
+        public async Task<IActionResult> Index()
+        {
+            var items = await _ItemRepository.GetAllItemsAsync();
+            return View(items);
         }
 
         // GET: Admin/Details/5
