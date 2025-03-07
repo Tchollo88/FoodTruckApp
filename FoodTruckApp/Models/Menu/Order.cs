@@ -10,8 +10,11 @@ namespace FoodTruckApp.Models.Menu
         public int Order_ID { get; set; }
 
         [Required]
-        public virtual ICollection<MenuItem>? MenuItems { get; set; } = new List<MenuItem>();
-        public virtual ICollection<Special>? Specials { get; set; } = new List<Special>();
+        public virtual ICollection<Item>? Items { get; set; } = new List<Item>();
+
+        [ForeignKey("Special")]
+        public int Special_ID { get; set; }
+        public virtual Special? special { get; set; }
 
         [Required]
         public int Amount { get; set; } = int.MinValue;
