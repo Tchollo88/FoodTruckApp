@@ -1,5 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using Repository.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -21,5 +29,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapRazorPages()
+   .WithStaticAssets();
 
 app.Run();
