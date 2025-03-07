@@ -25,6 +25,16 @@ namespace FoodTruckApp.Controllers
             return View(items);
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var Item = await _ItemRepository.GetItemByIdAsync(id);
+            if (Item == null)
+            {
+                return NotFound();
+            }
+            return View(Item);
+        }
+
         public IActionResult Create()
         {
             return View();
@@ -39,6 +49,44 @@ namespace FoodTruckApp.Controllers
                 return RedirectToAction(nameof(Items));
             }
             return View(item);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var item = await _ItemRepository.GetItemByIdAsync(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Item Item)
+        {
+            if (ModelState.IsValid)
+            {
+                await _ItemRepository.UpdateItemAsync(Item);
+                return RedirectToAction(nameof(Details), new { id = Item.Item_ID });
+            }
+            return View(Item);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var Item = await _ItemRepository.GetItemByIdAsync(id);
+            if (Item == null)
+            {
+                return NotFound();
+            }
+            return View(Item);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _ItemRepository.DeleteItemAsync(id);
+            return RedirectToAction(nameof(Items));
         }
     }
 }
