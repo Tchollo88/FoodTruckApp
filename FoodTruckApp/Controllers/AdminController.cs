@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Data;
+using Repository.Models.Menu;
 
 namespace FoodTruckApp.Controllers
 {
@@ -12,14 +13,32 @@ namespace FoodTruckApp.Controllers
         {
             _ItemRepository = itemRepository;
         }
+
         public IActionResult Index()
         {
             return View(); // Looks for Views/Admin/Index.cshtml
         }
+
         public async Task<IActionResult> Items()
         {
             var items = await _ItemRepository.GetAllItemsAsync();
             return View(items);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Item item)
+        {
+            if (ModelState.IsValid)
+            {
+                await _ItemRepository.AddItemAsync(item);
+                return RedirectToAction(nameof(Items));
+            }
+            return View(item);
         }
     }
 }
