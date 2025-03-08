@@ -1,4 +1,6 @@
-﻿﻿@{
+﻿@using Repository.Models.Menu
+@using FoodTruckCustomer.Controllers
+﻿@{
     Layout = "_Layout";
 }
 @model IEnumerable<Repository.Models.Menu.Item>
@@ -26,7 +28,15 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+            @if (Model == null)
+            {
+                <tr>
+                    <td> @Html.Display("No items available")</td>
+                </tr>
+            }
+            else
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
