@@ -40,30 +40,16 @@ namespace FoodTruckCustomer.Controllers
             return View();
         }
         
-        // POST: Customer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(Order Amount)
+        public async Task<IActionResult> Create(Order Price)
         {
             if (ModelState.IsValid)
             {
-                await _CustomerRepo.AddItemAsync(Amount);
+                await _CustomerRepo.AddItemAsync(Price);
                 return RedirectToAction(nameof(Items));
             }
-            return View(Amount);
+            return View(Price);
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -77,14 +63,15 @@ namespace FoodTruckCustomer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Order Amount)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Order Price)
         {
             if (ModelState.IsValid)
             {
-                await _CustomerRepo.UpdateItemAsync(Amount);
-                return RedirectToAction(nameof(Details), new { id = Amount.Order_ID });
+                await _CustomerRepo.UpdateItemAsync(Price);
+                return RedirectToAction(nameof(Details), new { id = Price.Order_ID });
             }
-            return View(Amount);
+            return View(Price);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -98,6 +85,7 @@ namespace FoodTruckCustomer.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _CustomerRepo.DeleteItemAsync(id);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Repository.Models.Client;
 
 namespace Repository.Models.Menu
 {
@@ -11,16 +10,6 @@ namespace Repository.Models.Menu
         [Key]
         public int Receipt_ID { get; set; }
 
-        [Required, ForeignKey("Customer")]
-        public int Customer_ID { get; set; }
-
-        public virtual Customer? Customer { get; set; }
-
-        [Required, ForeignKey("Purchase")]
-        public int Purchase_ID { get; set; }
-
-        public virtual Purchase? Purchase { get; set; }
-
         [Required, ForeignKey("Order")]
         public int Order_ID { get; set; }
 
@@ -28,5 +17,7 @@ namespace Repository.Models.Menu
 
         [Required, Column(TypeName = "decimal(10,2)")]
         public decimal TotalPrice { get; set; }
+        [Required]
+        public DateTime Date { get; set; } = DateTime.UtcNow;
     }
 }

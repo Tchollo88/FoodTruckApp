@@ -9,12 +9,22 @@ namespace Repository.Models.Menu
         public int Order_ID { get; set; }
 
         [Required]
-        public virtual ICollection<MenuItem>? MenuItems { get; set; } = new List<MenuItem>();
+        public virtual ICollection<Item>? _items { get; set; } = new List<Item>();
+      
+        public bool Special(bool _items, decimal _price, decimal Price)
+        {
+            
+            if (!_items && _price == Price)
+            {
+                return true;
+            }
+            else if (_items)
+            {
+                _price = Price * 0.90m; 
+                return false; 
+            }
+            return false;
+        }
 
-        [Required, ForeignKey("Special")]
-        public int Special_ID { get; set; }
-        public virtual Special? Special { get; set; }
-
-        public int Amount { get; set; } = int.MinValue;
     }
 }
