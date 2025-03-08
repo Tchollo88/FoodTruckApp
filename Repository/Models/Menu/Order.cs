@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Repository.Models.Menu
 {
@@ -9,9 +10,11 @@ namespace Repository.Models.Menu
 
         [Required]
         public virtual ICollection<MenuItem>? MenuItems { get; set; } = new List<MenuItem>();
-        public virtual ICollection<Special>? Specials { get; set; } = new List<Special>();
 
-        [Required]
+        [Required, ForeignKey("Special")]
+        public int Special_ID { get; set; }
+        public virtual Special? Special { get; set; }
+
         public int Amount { get; set; } = int.MinValue;
     }
 }
