@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Repository.Models.Menu.Item>
+﻿﻿@{
+    Layout = "_Layout";
+}
+@model IEnumerable<Repository.Models.Menu.Item>
 
 @{
     ViewData["Title"] = "Index";
@@ -19,9 +22,6 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
             </th>
         </tr>
     </thead>
@@ -36,9 +36,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
             </td>
             <td>
                 <a asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a> |
