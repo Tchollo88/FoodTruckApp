@@ -47,7 +47,7 @@ namespace FoodTruckCustomer.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Order));
             }
             catch
             {
@@ -56,14 +56,14 @@ namespace FoodTruckCustomer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Order Amount)
+        public async Task<IActionResult> Create(Order Count)
         {
             if (ModelState.IsValid)
             {
-                await _CustomerRepo.AddItemAsync(Amount);
+                await _CustomerRepo.AddItemAsync(Count);
                 return RedirectToAction(nameof(Items));
             }
-            return View(Amount);
+            return View(Count);
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -77,14 +77,14 @@ namespace FoodTruckCustomer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Order Amount)
+        public async Task<IActionResult> Edit(Order Count)
         {
             if (ModelState.IsValid)
             {
-                await _CustomerRepo.UpdateItemAsync(Amount);
-                return RedirectToAction(nameof(Details), new { id = Amount.Order_ID });
+                await _CustomerRepo.UpdateItemAsync(Count);
+                return RedirectToAction(nameof(Details), new { id = Count.Order_ID });
             }
-            return View(Amount);
+            return View(Count);
         }
 
         public async Task<IActionResult> Delete(int id)

@@ -26,26 +26,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                <a asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a> |
-                <a asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |
-
-            </td>
-        </tr>
-}
+@if(Model == null){
+    <td>@Html.Display("No items available")</td>
+    }
+    else{
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    <a asp-controller="CartController" asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a>
+                    <a asp-Controller="CustmoerController" asp-action="Details" asp-route-id="@item.Item_ID">Details</a>
+                </td>
+            </tr>
+            }
+    }
     </tbody>
 </table>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,11 @@ using Repository.Data;
 namespace FoodTruckApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250308194816_AlteredOrdertoLookforItem")]
+    partial class AlteredOrdertoLookforItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -290,10 +293,15 @@ namespace FoodTruckApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Order_ID")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Item_ID");
+
+                    b.HasIndex("Order_ID");
 
                     b.ToTable("Items");
                 });
@@ -330,18 +338,12 @@ namespace FoodTruckApp.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int>("Item_ID")
+                    b.Property<int>("Special_ID")
                         .HasColumnType("int");
-
-                    b.Property<int?>("Item_ID1")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Special")
-                        .HasColumnType("bit");
 
                     b.HasKey("Order_ID");
 
-                    b.HasIndex("Item_ID1");
+                    b.HasIndex("Special_ID");
 
                     b.ToTable("Orders");
                 });
@@ -480,6 +482,13 @@ namespace FoodTruckApp.Migrations
                         .HasForeignKey("MenuItem_ID");
                 });
 
+            modelBuilder.Entity("Repository.Models.Menu.Item", b =>
+                {
+                    b.HasOne("Repository.Models.Menu.Order", null)
+                        .WithMany("Items")
+                        .HasForeignKey("Order_ID");
+                });
+
             modelBuilder.Entity("Repository.Models.Menu.MenuItem", b =>
                 {
                     b.HasOne("Repository.Models.Menu.Item", "Item")
@@ -491,11 +500,13 @@ namespace FoodTruckApp.Migrations
 
             modelBuilder.Entity("Repository.Models.Menu.Order", b =>
                 {
-                    b.HasOne("Repository.Models.Menu.Item", "Item")
+                    b.HasOne("Repository.Models.Menu.Special", "Special")
                         .WithMany()
-                        .HasForeignKey("Item_ID1");
+                        .HasForeignKey("Special_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Item");
+                    b.Navigation("Special");
                 });
 
             modelBuilder.Entity("Repository.Models.Menu.Receipt", b =>
@@ -533,6 +544,11 @@ namespace FoodTruckApp.Migrations
             modelBuilder.Entity("Repository.Models.Menu.MenuItem", b =>
                 {
                     b.Navigation("Ingredients");
+                });
+
+            modelBuilder.Entity("Repository.Models.Menu.Order", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

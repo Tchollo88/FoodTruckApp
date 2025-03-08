@@ -9,15 +9,14 @@ namespace Repository.Models.Menu
         [Key]
         public int Item_ID { get; set; }
 
-        [Required]
         public string Name { get; set; } = string.Empty;
 
-        [Required, Column(TypeName = "decimal(10,2)")]
-        public decimal Price { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Price { get; set; } = decimal.Zero;
 
+        
         public string Description { get; set; } = string.Empty;
 
-        [Required]
         public string Category { get; set; } = string.Empty;
 
 

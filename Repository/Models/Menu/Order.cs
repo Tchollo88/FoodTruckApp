@@ -8,12 +8,11 @@ namespace Repository.Models.Menu
         [Key]
         public int Order_ID { get; set; }
 
-        [Required]
-        public virtual ICollection<MenuItem>? MenuItems { get; set; } = new List<MenuItem>();
+        [Required, ForeignKey("Item")]
+        public int Item_ID { get; set; }
+        public virtual Item? Item { get; set; }
 
-        [Required, ForeignKey("Special")]
-        public int Special_ID { get; set; }
-        public virtual Special? Special { get; set; }
+        public bool Special { get; set; }
 
         public int Amount { get; set; } = int.MinValue;
     }
