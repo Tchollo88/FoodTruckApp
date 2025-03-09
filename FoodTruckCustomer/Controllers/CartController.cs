@@ -54,7 +54,7 @@ namespace FoodTruckCustomer.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Order_ID,Amount")] Order order)
+        public async Task<IActionResult> Create([Bind("Order_ID,Price")] Order order)
         {
             if (ModelState.IsValid)
             {

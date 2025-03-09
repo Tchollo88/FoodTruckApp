@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Identity.Client;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Numerics;
 
 namespace Repository.Models.Menu
 {
@@ -10,7 +12,17 @@ namespace Repository.Models.Menu
 
         [Required]
         public virtual ICollection<Item>? _items { get; set; } = new List<Item>();
-      
+        public decimal TotalAmount => CalculatedAmount();
+        public decimal CalculatedAmount ()
+        {
+            decimal total = 0m;
+            foreach (var item in _items)
+            {
+                total += item.Price;
+            }
+            return total;
+        }
+
         public bool Special(bool _items, decimal _price, decimal Price)
         {
             

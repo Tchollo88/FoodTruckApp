@@ -3,6 +3,7 @@
 }
 
 @model IEnumerable<Repository.Models.Menu.Order>
+@using static IEnumerable<Repository.Models.Menu.Item>
 
 @{
     ViewData["Title"] = "Index";
@@ -29,11 +30,17 @@
                 @Html.DisplayFor(modelItem => item._items)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Order_ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Order_ID">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.Order_ID">Edit</a>
                 <a asp-action="Delete" asp-route-id="@item.Order_ID">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+<ul>
+    @foreach (var order in Model)
+    {
+        <li>item.Name - $item.Price</li>
+    }
+</ul>
+<p>Total Amount: $@Model.ToString</p>

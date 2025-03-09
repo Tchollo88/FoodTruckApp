@@ -9,7 +9,7 @@
     ViewData["Title"] = "Menu";
 }
 
-<h1>Index</h1>
+<h1>Fungis Menu</h1>
 
 <table class="table">
     <thead>
@@ -24,10 +24,14 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
             </th>
         </tr>
     </thead>
     <tbody>
+        
         @if (Model == null)
         {
             <tr>
@@ -48,11 +52,16 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <a asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a> |
-                        <a asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |
+                        @Html.DisplayFor(modelItem => item.Category)
+                    </td>
+                    <td>
+                        <a asp-controller="CartController" asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a> |
+                        <a asp-controller="CustomerController" asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |
 
                     </td>
                 </tr>
             }
     </tbody>
 </table>
+<div>
+    <a asp-controller="CartController" asp-action="Index">Back to Cart</a>
