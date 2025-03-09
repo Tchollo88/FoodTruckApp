@@ -4,13 +4,29 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Repository.Models.Menu
 {
     public class Order
-    {
+    { 
         [Key]
         public int Order_ID { get; set; }
 
-        [Required]
-        public virtual ICollection<Item>? _items { get; set; } = new List<Item>();
-      
+        [Required, ForeignKey("Item")]
+        public int Item_ID { get; set; }
+        public virtual Order? Item { get; set; }
+
+        public int Quantity { get; set; }
+
+        public decimal SubTotal(Item item, decimal Price)
+        {
+            if(Quantity > 1)
+            {
+                return item.Price * Quantity;
+            }
+            else
+            {
+                return item.Price;
+            }
+        }
+
+
         public bool Special(bool _items, decimal _price, decimal Price)
         {
             

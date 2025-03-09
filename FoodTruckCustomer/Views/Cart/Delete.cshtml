@@ -1,7 +1,4 @@
-﻿@{
-    Layout = "_Layout";
-}
-@model Repository.Models.Menu.Order
+﻿@model Repository.Models.Menu.Order
 
 @{
     ViewData["Title"] = "Delete";
@@ -15,10 +12,16 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model._items)
+            @Html.DisplayNameFor(model => model.Item)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model._items)
+            @Html.DisplayFor(model => model.Item.Order_ID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
         </dd>
     </dl>
     

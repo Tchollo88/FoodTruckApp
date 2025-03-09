@@ -1,8 +1,4 @@
-﻿@{
-    Layout = "_Layout";
-}
-
-@model IEnumerable<Repository.Models.Menu.Order>
+﻿@model IEnumerable<Repository.Models.Menu.Order>
 
 @{
     ViewData["Title"] = "Index";
@@ -17,7 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model._items)
+                @Html.DisplayNameFor(model => model.Item)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
             </th>
             <th></th>
         </tr>
@@ -26,7 +25,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item._items)
+                @Html.DisplayFor(modelItem => item.Item.Order_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Order_ID">Edit</a> |

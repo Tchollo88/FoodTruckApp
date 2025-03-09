@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,11 @@ using Repository.Data;
 namespace FoodTruckApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250308233407_Update")]
+    partial class Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,10 +243,15 @@ namespace FoodTruckApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Order_ID")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Item_ID");
+
+                    b.HasIndex("Order_ID");
 
                     b.ToTable("Items");
                 });
@@ -256,15 +264,7 @@ namespace FoodTruckApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Order_ID"));
 
-                    b.Property<int>("Item_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.HasKey("Order_ID");
-
-                    b.HasIndex("Item_ID");
 
                     b.ToTable("Orders");
                 });
@@ -344,15 +344,11 @@ namespace FoodTruckApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Repository.Models.Menu.Order", b =>
+            modelBuilder.Entity("Repository.Models.Menu.Item", b =>
                 {
-                    b.HasOne("Repository.Models.Menu.Order", "Item")
-                        .WithMany()
-                        .HasForeignKey("Item_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
+                    b.HasOne("Repository.Models.Menu.Order", null)
+                        .WithMany("_items")
+                        .HasForeignKey("Order_ID");
                 });
 
             modelBuilder.Entity("Repository.Models.Menu.Receipt", b =>
@@ -364,6 +360,11 @@ namespace FoodTruckApp.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Repository.Models.Menu.Order", b =>
+                {
+                    b.Navigation("_items");
                 });
 #pragma warning restore 612, 618
         }

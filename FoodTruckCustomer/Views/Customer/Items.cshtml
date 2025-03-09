@@ -48,8 +48,8 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <a asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a> |
-                        <a asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |
+                        <a asp-controller="CartContoller" asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a> |
+                        <a asp-controller="CustomerCOntroller" asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |
 
                     </td>
                 </tr>

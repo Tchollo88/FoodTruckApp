@@ -13,11 +13,11 @@ namespace Repository.Models.Menu
         public string Name { get; set; } = string.Empty;
 
         [Required, Column(TypeName = "decimal(10,2)")]
-        public decimal Price { get; set; }
+        public decimal Price { get; set; } = decimal.Zero;
 
         public string Description { get; set; } = string.Empty;
+        
         [Required]
         public string Category { get; set; } = string.Empty;
-
     }
 }
