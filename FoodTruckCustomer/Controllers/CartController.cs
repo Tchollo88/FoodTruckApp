@@ -13,7 +13,7 @@ namespace FoodTruckCustomer.Controllers
 {
     public class CartController : Controller
     {
-        public readonly IItemRepository _itemRepository;  
+        public readonly IItemRepository _itemRepository;
         public const string CartSessionKey = "ShoppingCart";
 
         public CartController(IItemRepository itemRepository)
@@ -23,7 +23,7 @@ namespace FoodTruckCustomer.Controllers
 
         public ShoppingCart GetCart()
         {
-            var cart = Session[CartSessionKey] as ShoppingCart;
+            var cart = GetCart();
             if (cart == null)
             {
                 cart = new ShoppingCart();
@@ -31,21 +31,21 @@ namespace FoodTruckCustomer.Controllers
             return cart;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var cart = GetCart();
             return View(cart);
         }
 
-        public IActionResult AddToCart(int itemId)
+        public async Task<IActionResult> AddToCart(int itemId)
         {
-            var item = _itemRepository.GetItemById(itemId); 
+            var item = await _itemRepository.GetItemByIdAsync(itemId);
             if (item != null)
             {
                 var cart = GetCart();
                 cart.AddItem(new CartItem
                 {
-                    ItemId = item.ItemId,
+                    Item_Id = item.Item_ID,
                     Name = item.Name,
                     Price = item.Price,
                     Quantity = 1
@@ -55,19 +55,20 @@ namespace FoodTruckCustomer.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult RemoveFromCart(int itemId)
+        public async Task<IActionResult> RemoveFromCart(int itemId)
         {
             var cart = GetCart();
             cart.RemoveItem(itemId);
             return RedirectToAction("Index");
         }
 
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
             var cart = GetCart();
             // Implement checkout process here
-            cart.Clear(); 
+            cart.Clear();
             return RedirectToAction("Index");
         }
     }
+}
 

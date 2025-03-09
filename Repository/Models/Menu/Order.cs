@@ -2,8 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
+using Repository.Models.Cart;
 
 namespace Repository.Models.Menu
+
 {
     public class Order
     {
@@ -14,6 +16,16 @@ namespace Repository.Models.Menu
         [Required]
         public virtual ICollection<Item>? _items { get; set; } = new List<Item>();
 
+        public decimal CalculateTotalPrice()
+        {
+            var cart = GetCart();
+            decimal totalPrice = cart.GetTotal();
+            return totalPrice;
+        }
+        public ShoppingCart GetCart()
+        {
+            return new ShoppingCart();
+        }
         public bool Special(bool _items, decimal _price, decimal Price)
         {
             

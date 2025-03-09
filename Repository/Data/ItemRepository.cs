@@ -11,7 +11,7 @@ namespace Repository.Data
 {
     public class ItemRepository : IItemRepository
     {
-        private readonly ApplicationDbContext _context;
+        public readonly ApplicationDbContext _context;
 
         public ItemRepository(ApplicationDbContext context)
         {

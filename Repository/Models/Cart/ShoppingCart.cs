@@ -19,7 +19,7 @@ namespace Repository.Models.Cart
 
         public void AddItem(CartItem item)
         {
-            var existingItem = _items.FirstOrDefault(i => i.ItemId == item.ItemId);
+            var existingItem = _items.FirstOrDefault(i => i.Item_Id == item.Item_Id);
             if (existingItem != null)
             {
                 existingItem.Quantity += item.Quantity;
@@ -32,7 +32,7 @@ namespace Repository.Models.Cart
 
         public void RemoveItem(int itemId)
         {
-            var item = _items.FirstOrDefault(i => i.ItemId == itemId);
+            var item = _items.FirstOrDefault(i => i.Item_Id == itemId);
             if (item != null)
             {
                 _items.Remove(item);
@@ -49,3 +49,4 @@ namespace Repository.Models.Cart
             _items.Clear();
         }
     }
+}
