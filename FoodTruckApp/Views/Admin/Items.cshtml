@@ -42,7 +42,7 @@
             <td>
                 <div class="col-md-6">
                     <form asp-action="Category" method="get" class="form-control">
-                        @Html.DropDownList("Category", new SelectList(Model.Select(c => c.Category).Distinct()))
+                        @Html.DropDownList("Category", new SelectList(Model.Select(c => c.Category).Distinct()), "All")
                         <input type="submit" value="Filter" class="btn btn-primary" />
                     </form>
                 </div>
