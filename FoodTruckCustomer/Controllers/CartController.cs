@@ -26,22 +26,22 @@ namespace FoodTruckCustomer.Controllers
         }
 
         // GET: Cart/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var order = await _context.Orders
-                .FirstOrDefaultAsync(m => m.Order_ID == id);
-            if (order == null)
-            {
-                return NotFound();
-            }
+        //    var order = await _context.Orders
+        //        .FirstOrDefaultAsync(m => m.Order_ID == id);
+        //    if (order == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(order);
-        }
+        //    return View(order);
+        //}
 
         // GET: Cart/Create
         public IActionResult Create()
@@ -152,6 +152,37 @@ namespace FoodTruckCustomer.Controllers
         private bool OrderExists(int id)
         {
             return _context.Orders.Any(e => e.Order_ID == id);
+        }
+        public async Task<IActionResult> Checkout(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(m => m.Order_ID == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
+        // POST: Cart/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CheckoutConfirmed(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order != null)
+            {
+                _context.Orders.Remove(order);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

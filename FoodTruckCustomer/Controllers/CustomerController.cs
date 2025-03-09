@@ -41,7 +41,6 @@ namespace FoodTruckCustomer.Controllers
         }
         
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Order Price)
         {
             if (ModelState.IsValid)
@@ -63,7 +62,6 @@ namespace FoodTruckCustomer.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Order Price)
         {
             if (ModelState.IsValid)
@@ -85,7 +83,6 @@ namespace FoodTruckCustomer.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _CustomerRepo.DeleteItemAsync(id);

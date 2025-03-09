@@ -220,15 +220,15 @@ namespace FoodTruckApp.Migrations
                     MenuItem_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Item_ID = table.Column<int>(type: "int", nullable: false),
-                    Item_ID1 = table.Column<int>(type: "int", nullable: true),
+                    Extra = table.Column<int>(type: "int", nullable: true),
                     Order_ID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MenuItems", x => x.MenuItem_ID);
                     table.ForeignKey(
-                        name: "FK_MenuItems_Items_Item_ID1",
-                        column: x => x.Item_ID1,
+                        name: "FK_MenuItems_Items_Extra",
+                        column: x => x.Extra,
                         principalTable: "Items",
                         principalColumn: "Item_ID");
                     table.ForeignKey(
@@ -359,9 +359,9 @@ namespace FoodTruckApp.Migrations
                 column: "MenuItem_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MenuItems_Item_ID1",
+                name: "IX_MenuItems_Extra",
                 table: "MenuItems",
-                column: "Item_ID1");
+                column: "Extra");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MenuItems_Order_ID",
