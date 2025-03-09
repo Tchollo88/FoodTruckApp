@@ -1,0 +1,106 @@
+﻿namespace FoodTruckCustomer.wwwroot.css
+﻿ /* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: cornflowerblue;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: lightyellow !important;
+}
+
+.navbar-brand {
+    color: darkslategrey !important;
+    font-size: 24px;
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: black !important;
+    font-size: 16px;
+}
+
+    .navbar-nav .nav-item .nav-link:hover {
+        color: darkred !important;
+    }
+
+/* Food Menu Table */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+/* Form Styles */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+    form label {
+        font-weight: bold;
+    }
+
+    form input, form select {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    form button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+/* Order Confirmation Styles */
+h2 {
+    color: #343a40;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+    ul li {
+        padding: 5px 0;
+    }
