@@ -98,5 +98,16 @@ namespace FoodTruckApp.Controllers
             }
             return View(categories);
         }
+
+        public async Task<IActionResult> NameSearch(string name)
+        {
+            ViewBag.param = name;
+            var names = await _ItemRepository.SearchNameAsync(name);
+            if (names == null)
+            {
+                return NotFound();
+            }
+            return View(names);
+        }
     }
 }

@@ -1,14 +1,13 @@
 ﻿@model IEnumerable<Repository.Models.Menu.Item>
 
 @{
-    ViewData["Title"] = "Items";
+    ViewData["Title"] = "NameSearch";
 }
 
-<h1>Items</h1>
+<h1>Search results for: @ViewBag.param</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<a asp-action="Items">Back to List</a>
+
 <table class="table">
     <thead>
         <tr>
@@ -28,26 +27,6 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>
-                <div class="col-md-6">
-                    <form asp-action="NameSearch" method="get" class="form-control">
-                        <input type="search" name="Name" placeholder="Search by Name" />
-                        <input type="submit" value="Search" class="btn btn-primary" />
-                    </form>
-                </div>
-            </td>
-            <td></td>
-            <td></td>
-            <td>
-                <div class="col-md-6">
-                    <form asp-action="Category" method="get" class="form-control">
-                        @Html.DropDownList("Category", new SelectList(Model.Select(c => c.Category).Distinct()))
-                        <input type="submit" value="Filter" class="btn btn-primary" />
-                    </form>
-                </div>
-            </td>
-        </tr>
 @foreach (var item in Model) {
         <tr>
             <td>
