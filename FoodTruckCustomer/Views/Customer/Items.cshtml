@@ -1,5 +1,6 @@
 ﻿@using Repository.Models.Menu
 @using FoodTruckCustomer.Controllers
+@using Repository.Models.Cart
 ﻿@{
     Layout = "_Layout";
 }
@@ -45,9 +46,9 @@
             @foreach (var item in Model)
             {
                 <tr>
-                            <td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Image)
-                            </td>
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>

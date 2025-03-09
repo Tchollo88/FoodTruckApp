@@ -7,12 +7,12 @@ namespace Repository.Models.Menu
 {
     public class Order
     {
+
         [Key]
         public int Order_ID { get; set; }
 
         [Required]
         public virtual ICollection<Item>? _items { get; set; } = new List<Item>();
-
 
         public bool Special(bool _items, decimal _price, decimal Price)
         {
