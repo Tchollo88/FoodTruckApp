@@ -10,5 +10,6 @@ namespace Repository.Data
         Task UpdateItemAsync(Item item);
         Task DeleteItemAsync(int id);
         Task<IEnumerable<Item>> GetCategoryAsync(string category);
+        Task<IEnumerable<Item>> SearchNameAsync(string name);
     }
 }

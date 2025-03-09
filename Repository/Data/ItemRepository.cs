@@ -53,5 +53,10 @@ namespace Repository.Data
         {
             return await _context.Items.Where(i => i.Category == category).ToListAsync();
         }
+
+        public async Task<IEnumerable<Item>> SearchNameAsync(string name)
+        {
+            return await _context.Items.Where(i => i.Name.Contains(name)).ToListAsync();
+        }
     }
 }
