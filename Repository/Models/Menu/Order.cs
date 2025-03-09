@@ -12,16 +12,7 @@ namespace Repository.Models.Menu
 
         [Required]
         public virtual ICollection<Item>? _items { get; set; } = new List<Item>();
-        public decimal TotalAmount => CalculatedAmount();
-        public decimal CalculatedAmount ()
-        {
-            decimal total = 0m;
-            foreach (var item in _items)
-            {
-                total += item.Price;
-            }
-            return total;
-        }
+
 
         public bool Special(bool _items, decimal _price, decimal Price)
         {

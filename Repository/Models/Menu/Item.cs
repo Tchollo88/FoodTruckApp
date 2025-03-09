@@ -19,5 +19,7 @@ namespace Repository.Models.Menu
         [Required]
         public string Category { get; set; } = string.Empty;
 
+        public string Image { get; set; } = string.Empty;
+
     }
 }
