@@ -48,5 +48,10 @@ namespace Repository.Data
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<Item>> GetCategoryAsync(string category)
+        {
+            return await _context.Items.Where(i => i.Category == category).ToListAsync();
+        }
     }
 }
