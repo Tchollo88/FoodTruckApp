@@ -7,15 +7,11 @@
     ViewData["Title"] = "Category";
 }
 
-<h1>
-    @foreach (var item in Model.Select(c => c.Category).Distinct())
-    {
-        @Html.DisplayFor(modelItem => item)
-    }
-</h1>
+<h1>@ViewBag.param</h1>
 
-
-<a asp-action="Items">Back to List</a>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 
 <table class="table">
     <thead>
@@ -36,7 +32,27 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        <tr>
+            <td>
+                <div class="col-md-6">
+                    <form asp-action="NameSearch" method="get" class="form-control">
+                        <input type="search" name="Name" placeholder="Search by Name" />
+                        <input type="submit" value="Search" class="btn btn-primary" />
+                    </form>
+                </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td>
+                <div class="col-md-6">
+                    <form asp-action="Category" method="get" class="form-control">
+                        @Html.DropDownList("Category", new SelectList(Model.Select(c => c.Category).Distinct()),"All")
+                        <input type="submit" value="Filter" class="btn btn-primary" />
+                    </form>
+                </div>
+            </td>
+        </tr>
+@foreach (var item in Model.Where(i=>i.Category == ViewBag.param)) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -59,3 +75,7 @@
         }
     </tbody>
 </table>
+
+<p>
+    <a asp-action="Items">Back to List</a>
+</p>

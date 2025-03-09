@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Repository.Data;
 using Repository.Models.Menu;
 
@@ -91,10 +92,11 @@ namespace FoodTruckApp.Controllers
 
         public async Task<IActionResult> Category(string category)
         {
-            var categories = await _ItemRepository.GetCategoryAsync(category);
-            if (categories == null)
+            ViewBag.param = category;
+            var categories = await _ItemRepository.GetAllItemsAsync();
+            if (category == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Items));
             }
             return View(categories);
         }
@@ -102,10 +104,10 @@ namespace FoodTruckApp.Controllers
         public async Task<IActionResult> NameSearch(string name)
         {
             ViewBag.param = name;
-            var names = await _ItemRepository.SearchNameAsync(name);
-            if (names == null)
+            var names = await _ItemRepository.GetAllItemsAsync();
+            if (name == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Items));
             }
             return View(names);
         }
