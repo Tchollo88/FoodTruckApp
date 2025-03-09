@@ -88,5 +88,15 @@ namespace FoodTruckApp.Controllers
             await _ItemRepository.DeleteItemAsync(id);
             return RedirectToAction(nameof(Items));
         }
+
+        public async Task<IActionResult> Category(string category)
+        {
+            var categories = await _ItemRepository.GetCategoryAsync(category);
+            if (categories == null)
+            {
+                return NotFound();
+            }
+            return View(categories);
+        }
     }
 }
