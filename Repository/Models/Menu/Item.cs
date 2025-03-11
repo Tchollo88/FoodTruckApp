@@ -16,7 +16,10 @@ namespace Repository.Models.Menu
         public decimal Price { get; set; } = decimal.Zero;
 
         public string Description { get; set; } = string.Empty;
-        
+
+        public bool Special { get; set; } = false;
+        public int Discount { get; set; } = 10;
+
         [Required]
         public string Category { get; set; } = string.Empty;
     }

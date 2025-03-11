@@ -8,7 +8,7 @@ using Repository.Data;
 
 #nullable disable
 
-namespace FoodTruckApp.Migrations
+namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -236,12 +236,18 @@ namespace FoodTruckApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Discount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
+
+                    b.Property<bool>("Special")
+                        .HasColumnType("bit");
 
                     b.HasKey("Item_ID");
 
@@ -258,6 +264,9 @@ namespace FoodTruckApp.Migrations
 
                     b.Property<int>("Item_ID")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");

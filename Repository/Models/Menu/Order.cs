@@ -14,23 +14,10 @@ namespace Repository.Models.Menu
 
         public int Quantity { get; set; }
 
-        public decimal SubTotal 
-        { get => Quantity * Item.Price;}
+        public decimal Price { get; set; }
 
-        public bool Special(bool _items, decimal _price, decimal Price)
-        {
-            
-            if (!_items && _price == Price)
-            {
-                return true;
-            }
-            else if (_items)
-            {
-                _price = Price * 0.90m; 
-                return false; 
-            }
-            return false;
-        }
+        public decimal SubTotal 
+        { get => Quantity * Price;}
 
     }
 }

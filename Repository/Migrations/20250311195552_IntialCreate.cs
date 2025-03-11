@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace FoodTruckApp.Migrations
+namespace Repository.Migrations
 {
     /// <inheritdoc />
     public partial class IntialCreate : Migration
@@ -51,21 +51,6 @@ namespace FoodTruckApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customers",
-                columns: table => new
-                {
-                    Customer_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customers", x => x.Customer_ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Items",
                 columns: table => new
                 {
@@ -74,37 +59,13 @@ namespace FoodTruckApp.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Special = table.Column<bool>(type: "bit", nullable: false),
+                    Discount = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Item_ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Order_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Order_ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Purchases",
-                columns: table => new
-                {
-                    Purchase_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Purchases", x => x.Purchase_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,8 +114,8 @@ namespace FoodTruckApp.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -198,8 +159,8 @@ namespace FoodTruckApp.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -214,50 +175,24 @@ namespace FoodTruckApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MenuItems",
+                name: "Orders",
                 columns: table => new
                 {
-                    MenuItem_ID = table.Column<int>(type: "int", nullable: false)
+                    Order_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Item_ID = table.Column<int>(type: "int", nullable: false),
-                    Extra = table.Column<int>(type: "int", nullable: true),
-                    Order_ID = table.Column<int>(type: "int", nullable: true)
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MenuItems", x => x.MenuItem_ID);
+                    table.PrimaryKey("PK_Orders", x => x.Order_ID);
                     table.ForeignKey(
-                        name: "FK_MenuItems_Items_Extra",
-                        column: x => x.Extra,
+                        name: "FK_Orders_Items_Item_ID",
+                        column: x => x.Item_ID,
                         principalTable: "Items",
-                        principalColumn: "Item_ID");
-                    table.ForeignKey(
-                        name: "FK_MenuItems_Orders_Order_ID",
-                        column: x => x.Order_ID,
-                        principalTable: "Orders",
-                        principalColumn: "Order_ID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Specials",
-                columns: table => new
-                {
-                    Special_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    Order_ID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Specials", x => x.Special_ID);
-                    table.ForeignKey(
-                        name: "FK_Specials_Orders_Order_ID",
-                        column: x => x.Order_ID,
-                        principalTable: "Orders",
-                        principalColumn: "Order_ID");
+                        principalColumn: "Item_ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -266,52 +201,19 @@ namespace FoodTruckApp.Migrations
                 {
                     Receipt_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Customer_ID = table.Column<int>(type: "int", nullable: false),
-                    Purchase_ID = table.Column<int>(type: "int", nullable: false),
                     Order_ID = table.Column<int>(type: "int", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
+                    TotalPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Receipts", x => x.Receipt_ID);
-                    table.ForeignKey(
-                        name: "FK_Receipts_Customers_Customer_ID",
-                        column: x => x.Customer_ID,
-                        principalTable: "Customers",
-                        principalColumn: "Customer_ID",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Receipts_Orders_Order_ID",
                         column: x => x.Order_ID,
                         principalTable: "Orders",
                         principalColumn: "Order_ID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Receipts_Purchases_Purchase_ID",
-                        column: x => x.Purchase_ID,
-                        principalTable: "Purchases",
-                        principalColumn: "Purchase_ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ingredients",
-                columns: table => new
-                {
-                    Ingredient_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NumberInStock = table.Column<int>(type: "int", nullable: false),
-                    MenuItem_ID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ingredients", x => x.Ingredient_ID);
-                    table.ForeignKey(
-                        name: "FK_Ingredients_MenuItems_MenuItem_ID",
-                        column: x => x.MenuItem_ID,
-                        principalTable: "MenuItems",
-                        principalColumn: "MenuItem_ID");
                 });
 
             migrationBuilder.CreateIndex(
@@ -354,38 +256,13 @@ namespace FoodTruckApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ingredients_MenuItem_ID",
-                table: "Ingredients",
-                column: "MenuItem_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MenuItems_Extra",
-                table: "MenuItems",
-                column: "Extra");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MenuItems_Order_ID",
-                table: "MenuItems",
-                column: "Order_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Receipts_Customer_ID",
-                table: "Receipts",
-                column: "Customer_ID");
+                name: "IX_Orders_Item_ID",
+                table: "Orders",
+                column: "Item_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Receipts_Order_ID",
                 table: "Receipts",
-                column: "Order_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Receipts_Purchase_ID",
-                table: "Receipts",
-                column: "Purchase_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Specials_Order_ID",
-                table: "Specials",
                 column: "Order_ID");
         }
 
@@ -408,13 +285,7 @@ namespace FoodTruckApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Ingredients");
-
-            migrationBuilder.DropTable(
                 name: "Receipts");
-
-            migrationBuilder.DropTable(
-                name: "Specials");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -423,19 +294,10 @@ namespace FoodTruckApp.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "MenuItems");
-
-            migrationBuilder.DropTable(
-                name: "Customers");
-
-            migrationBuilder.DropTable(
-                name: "Purchases");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Items");
-
-            migrationBuilder.DropTable(
-                name: "Orders");
         }
     }
 }

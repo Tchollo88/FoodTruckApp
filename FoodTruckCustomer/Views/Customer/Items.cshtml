@@ -24,6 +24,15 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
+				@Html.DisplayNameFor(model => model.Special)
+            </th>
+            <th>
+				@Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+			<th>
             </th>
         </tr>
     </thead>
@@ -42,14 +51,25 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <a asp-controller="CartContoller" asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a> |
-                        <a asp-controller="CustomerController" asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <th>
+                        @Html.DisplayFor(model => item.Special)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => item.Discount)
+                    </th>
+					<td>
+						@Html.DisplayFor(modelItem => item.Category)
+					</td>
+                    <td>
+                        <form asp-controller="CartController" asp-action="Create" method="post">
+                            <input type="hidden" name="itemId" value="@item.Item_ID" />
+                            <button type="submit">Add to Cart</button>
+                        </form>
                     </td>
                 </tr>
             }

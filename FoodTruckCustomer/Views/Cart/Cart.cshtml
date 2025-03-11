@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<Repository.Models.Menu.Order>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Cart";
 }
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -25,17 +22,18 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Order_ID)
+                @Html.DisplayFor(modelItem => item.Item.Category)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Order_ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Order_ID">Details</a> |
+                <a asp-action="SingleAddAsync" asp-route-id="@item.Order_ID">Add</a> |
+                <a asp-action="SingleSubtractAsync" asp-route-id="@item.Order_ID">Subtract</a> |
                 <a asp-action="Delete" asp-route-id="@item.Order_ID">Delete</a>
             </td>
         </tr>
 }
+@*         <a asp-action="Checkout" asp-route-id="@item.Order_ID">Checkout</a> *@
     </tbody>
 </table>

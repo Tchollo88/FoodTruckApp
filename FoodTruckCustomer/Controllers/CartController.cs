@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,107 +14,73 @@ namespace FoodTruckCustomer.Controllers
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICustomerRepo _CustomerRepo;
 
-        public CartController(ApplicationDbContext context)
+        public CartController(ApplicationDbContext context, ICustomerRepo customerRepo)
         {
             _context = context;
+            _CustomerRepo = customerRepo;
         }
 
         // GET: Cart
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Orders.ToListAsync());
+            var cartOrders = await _context.Orders.ToListAsync();
+            return View(cartOrders);
         }
 
-        // GET: Cart/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var order = await _context.Orders
-        //        .FirstOrDefaultAsync(m => m.Order_ID == id);
-        //    if (order == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(order);
-        //}
-
-        // GET: Cart/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Cart/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Order_ID,Amount")] Order order)
+        public async Task<IActionResult> Create(int itemId)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(order);
-        }
-
-        // GET: Cart/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
+            var item = await _context.Items.FindAsync(itemId);
+            if (item == null)
             {
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
+            var existingOrder = await _context.Orders.FirstOrDefaultAsync(o => o.Item_ID == itemId);
+            if (existingOrder != null)
             {
-                return NotFound();
+                existingOrder.Quantity++;
+                _context.Orders.Update(existingOrder);
             }
-            return View(order);
-        }
-
-        // POST: Cart/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Order_ID,Amount")] Order order)
-        {
-            if (id != order.Order_ID)
+            else
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                var newOrder = new Order
                 {
-                    _context.Update(order);
+                    Item_ID = item.Item_ID,
+                    Item = item,
+                    Quantity = 1
+                };
+
+                _context.Orders.Add(newOrder);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Items");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SingleAddAsync([Bind("Order_ID")] Order order) 
+        {
+            if (ModelState.IsValid)
+            {
+                var existingOrder = await _context.Orders.FindAsync(order.Order_ID);
+                if (existingOrder != null)
+                {
+                    existingOrder.Quantity += 1; // Increment Quantity by 1
+                    _context.Update(existingOrder);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderExists(order.Order_ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(Index);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SingleSubtractAsync(int orderId)
+        {
+            await _CustomerRepo.SubtractItemAsync(orderId);
+            return RedirectToAction(nameof(Index)); // Refresh cart page
         }
 
         // GET: Cart/Delete/5
@@ -136,7 +103,6 @@ namespace FoodTruckCustomer.Controllers
 
         // POST: Cart/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var order = await _context.Orders.FindAsync(id);
@@ -171,18 +137,48 @@ namespace FoodTruckCustomer.Controllers
         }
 
         // POST: Cart/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Checkout")]
         public async Task<IActionResult> CheckoutConfirmed(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            if (order != null)
-            {
-                _context.Orders.Remove(order);
-            }
+            //@ViewBag.OrderCount = orderCount;
+            return View();
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //var order = await _context.Orders.FindAsync(id);
+            //if (order != null)
+            //{
+            //    _context.Orders.Remove(order);
+            //}
+
+            //await _context.SaveChangesAsync();
+            //return RedirectToAction(nameof(Index));
         }
     }
 }
+
+
+
+
+
+
+/*
+ * How to get  "public async Task<IActionResult> Checkout(int? id) 
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(m => m.Order_ID == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+               await _CustomerRepo.AddItemAsync(orders);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(Index);
+         }" to check out multiple orders in a list, move to a different view from a different controller, and delete the entire list
+ */
