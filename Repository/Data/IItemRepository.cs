@@ -9,5 +9,6 @@ namespace Repository.Data
         Task AddItemAsync(Item item);
         Task UpdateItemAsync(Item item);
         Task DeleteItemAsync(int id);
+        Task<IEnumerable<Receipt>> GetAllReceiptsAsync();
     }
 }

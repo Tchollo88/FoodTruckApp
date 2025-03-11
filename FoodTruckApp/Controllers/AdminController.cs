@@ -111,5 +111,10 @@ namespace FoodTruckApp.Controllers
             }
             return View(names);
         }
+        public async Task<IActionResult> SalesReport()
+        {
+            var receipts = await _ItemRepository.GetAllReceiptsAsync();
+            return View(receipts);
+        }
     }
 }
