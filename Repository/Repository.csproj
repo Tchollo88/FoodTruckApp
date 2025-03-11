@@ -17,6 +17,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Client\" />
+	  <Folder Include="Models\Menu\Images\" />
 	</ItemGroup>
 
 </Project>
