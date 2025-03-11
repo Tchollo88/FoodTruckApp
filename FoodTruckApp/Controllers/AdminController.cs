@@ -10,6 +10,7 @@ namespace FoodTruckApp.Controllers
     public class AdminController : Controller
     {
         private readonly IItemRepository _ItemRepository;
+
         public AdminController(IItemRepository itemRepository)
         {
             _ItemRepository = itemRepository;
@@ -28,12 +29,12 @@ namespace FoodTruckApp.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var Item = await _ItemRepository.GetItemByIdAsync(id);
-            if (Item == null)
+            var item = await _ItemRepository.GetItemByIdAsync(id);
+            if (item == null)
             {
                 return NotFound();
             }
-            return View(Item);
+            return View(item);
         }
 
         public IActionResult Create()
@@ -63,24 +64,82 @@ namespace FoodTruckApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Item Item)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Item_ID,Name,Price,Description,Category,Image")] Item item, IFormFile imageFile)
         {
+            if (id != item.Item_ID) return NotFound();
+
             if (ModelState.IsValid)
             {
-                await _ItemRepository.UpdateItemAsync(Item);
-                return RedirectToAction(nameof(Details), new { id = Item.Item_ID });
+                try
+                {
+                    var existingItem = await _ItemRepository.GetItemByIdAsync(id);
+                    if (existingItem == null) return NotFound();
+
+                    // Handle image upload
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                        var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+                        if (!allowedExtensions.Contains(fileExtension))
+                        {
+                            ModelState.AddModelError("imageFile", "Invalid file type. Only JPG, PNG, and GIF are allowed.");
+                            return View(item);
+                        }
+
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "menu", "images");
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        // Delete old image if it exists
+                        if (!string.IsNullOrEmpty(existingItem.Image))
+                        {
+                            var oldFilePath = Path.Combine(uploadsFolder, existingItem.Image);
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        // Save new image
+                        var uniqueFileName = Guid.NewGuid().ToString("N") + fileExtension;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+
+                        existingItem.Image = uniqueFileName; // Update the Image property
+                    }
+
+                    // Update other fields
+                    existingItem.Name = item.Name;
+                    existingItem.Price = item.Price;
+                    existingItem.Description = item.Description;
+                    existingItem.Category = item.Category;
+
+                    await _ItemRepository.UpdateItemAsync(existingItem);
+                    return RedirectToAction(nameof(Details), new { id = item.Item_ID });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                    return View(item);
+                }
             }
-            return View(Item);
+            return View(item);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var Item = await _ItemRepository.GetItemByIdAsync(id);
-            if (Item == null)
+            var item = await _ItemRepository.GetItemByIdAsync(id);
+            if (item == null)
             {
                 return NotFound();
             }
-            return View(Item);
+            return View(item);
         }
 
         [HttpPost, ActionName("Delete")]
