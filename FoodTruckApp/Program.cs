@@ -13,8 +13,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>() // Enables Role Management
@@ -22,6 +20,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddTransient<ApplicationDbSeeder>(); // Register the seeder as a transient service
 
 var app = builder.Build();
 
@@ -48,9 +47,17 @@ app.MapControllerRoute(
 app.MapRazorPages()
    .WithStaticAssets();
 
-await CreateRoles(app.Services);
+// Migrate database, create roles, and seed data
+using (var scope = app.Services.CreateScope())
+{
+    await CreateRoles(app.Services); // Your existing role creation
+
+    var seeder = scope.ServiceProvider.GetRequiredService<ApplicationDbSeeder>();
+    await seeder.SeedAsync(); // Seed the database with sample data
+}
 
 app.Run();
+
 async Task CreateRoles(IServiceProvider serviceProvider)
 {
     using (var scope = serviceProvider.CreateScope())
