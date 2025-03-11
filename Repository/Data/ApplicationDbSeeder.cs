@@ -20,9 +20,9 @@ public class ApplicationDbSeeder
     {
         var items = new List<Item>
         {
-            new Item { Name = "Burger", Price = 5.99m, Category = "Main Course", Description = "Delicious burger" },
-            new Item { Name = "Pizza", Price = 7.99m, Category = "Main Course", Description = "Cheesy pizza" },
-            new Item { Name = "Fries", Price = 3.49m, Category = "Side", Description = "Crispy fries" }
+            new Item { Name = "Burger", Price = 5.99m, Category = "Main Course", Description = "Delicious burger", OnSale = false },
+            new Item { Name = "Pizza", Price = 7.99m, Category = "Main Course", Description = "Cheesy pizza", OnSale = false },
+            new Item { Name = "Fries", Price = 3.49m, Category = "Side", Description = "Crispy fries", OnSale = false }
         };
 
         foreach (var item in items)
