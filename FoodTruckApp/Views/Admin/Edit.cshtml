@@ -37,6 +37,13 @@
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="OnSale" class="control-label">
+                    On Sale
+                    <input asp-for="OnSale" />
+                </label>
+                <span asp-validation-for="OnSale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
