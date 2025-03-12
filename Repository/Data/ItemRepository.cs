@@ -48,5 +48,10 @@ namespace Repository.Data
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<Receipt>> GetAllReceiptsAsync()
+        {
+            return await _context.Receipts.ToListAsync();
+        }
     }
 }
