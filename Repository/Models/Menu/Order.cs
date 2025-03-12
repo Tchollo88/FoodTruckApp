@@ -14,9 +14,12 @@ namespace Repository.Models.Menu
         public int Item_ID { get; set; }
         public virtual Item? Item { get; set; }
 
+        public string Image { get => Item.Image; }
+        public string Name { get => Item.Name; }
+
         public int Quantity { get; set; }
 
-        public decimal Price { get; set; }
+        public decimal Price { get => Item.Price; }
 
         public decimal SubTotal 
         { get => Quantity * Price;}
