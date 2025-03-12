@@ -38,11 +38,11 @@ namespace FoodTruckCustomer.Controllers
                 return NotFound();
             }
 
-            var existingOrder = await _context.Orders.FirstOrDefaultAsync(o => o.Item_ID == itemId);
+            var existingOrder = await _context.lineItems.FirstOrDefaultAsync(o => o.Item_ID == itemId);
             if (existingOrder != null)
             {
                 existingOrder.Quantity++;
-                _context.Orders.Update(existingOrder);
+                _context.lineItems.Update(existingOrder);
             }
             else
             {
@@ -52,11 +52,12 @@ namespace FoodTruckCustomer.Controllers
                     Item = item,
                     Quantity = 1
                 };
-
                 _context.Orders.Add(newOrder);
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction("Items");
+
+            // Redirect to CustomerController's Items action
+            return RedirectToAction("Items", "CustomerController");
         }
 
         [HttpPost]

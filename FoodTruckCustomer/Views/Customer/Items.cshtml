@@ -68,16 +68,10 @@
                         @Html.DisplayFor(modelItem => item.Category)
                     </td>
                     <td>
-                        <a asp-controller="CartController" asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a> |
-                        <a asp-controller="CustomerController" asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |
-
                         @Html.DisplayFor(modelItem => item.Price)
                     </td>
                     <th>
                         @Html.DisplayFor(model => item.Category)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(model => item.Image)
                     </th>
 					<td>
 						@Html.DisplayFor(modelItem => item.OnSale)
@@ -96,4 +90,4 @@
     </tbody>
 </table>
 <div>
-    <a asp-controller="CartController" asp-action="Index">Back to Cart</a>
+    <a asp-controller="CartController" asp-action="">Back to Cart</a>
