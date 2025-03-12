@@ -42,7 +42,7 @@ namespace FoodTruckApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Item item)
+       public async Task<IActionResult> Create(Item item)
         {
             if (ModelState.IsValid)
             {
@@ -50,7 +50,7 @@ namespace FoodTruckApp.Controllers
                 return RedirectToAction(nameof(Items));
             }
             return View(item);
-        }
+        } 
 
         public async Task<IActionResult> Edit(int id)
         {

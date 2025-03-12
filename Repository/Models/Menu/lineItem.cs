@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,8 +16,12 @@ namespace Repository.Models.Menu
 
         [ForeignKey("Item")]
         public int Item_ID { get; set; }
+        public virtual Item? Item { get; set; }
+
+        public int Quantity { get; set; }
+      
         [ForeignKey("Order")]
         public int Order_ID { get; set; }
-        public int Quantity { get; set; }
+        public virtual Order? Order { get; set; }
     }
 }

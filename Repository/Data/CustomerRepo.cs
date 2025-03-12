@@ -30,7 +30,7 @@ namespace Repository.Data
 
         public async Task<bool> SubtractItemAsync(int orderId)
         {
-            var existingOrder = await _context.Orders.FindAsync(orderId);
+            var existingOrder = await _context.lineItems.FindAsync(orderId);
 
             if (existingOrder == null)
             {
@@ -40,12 +40,12 @@ namespace Repository.Data
             if (existingOrder.Quantity > 1)
             {
                 existingOrder.Quantity--;
-                _context.Orders.Update(existingOrder);
+                _context.lineItems.Update(existingOrder);
             }
             else
             {
                 // If quantity is 0 or 1, remove the order
-                _context.Orders.Remove(existingOrder);
+                _context.lineItems.Remove(existingOrder);
             }
             await _context.SaveChangesAsync();
 

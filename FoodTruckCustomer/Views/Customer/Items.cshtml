@@ -80,8 +80,9 @@
 						@Html.DisplayFor(modelItem => item.DiscountPercentage)
                     </td>
                     <td>
-                        <form asp-controller="CartController" asp-action="Create" method="post">
+                        <form asp-controller="Cart" asp-action="Create" method="post">
                             <input type="hidden" name="itemId" value="@item.Item_ID" />
+                            <input type="number" name="Qty" value="1"/>
                             <button type="submit">Add to Cart</button>
                         </form>
                     </td>
@@ -90,4 +91,4 @@
     </tbody>
 </table>
 <div>
-    <a asp-controller="CartController" asp-action="">Back to Cart</a>
+    <a asp-controller="CartController" asp-action="Cart">Back to Cart</a>
