@@ -23,6 +23,11 @@
     <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Cart\" />
+    <Folder Include="Views\Customer\" />
+  </ItemGroup>
+
 	
 
 </Project>
