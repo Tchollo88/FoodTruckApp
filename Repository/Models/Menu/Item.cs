@@ -20,7 +20,7 @@ namespace Repository.Models.Menu
         public string Category { get; set; } = string.Empty;
 
         public string Image { get; set; } = string.Empty;
-        
+
         public bool OnSale { get; set; } = false;
 
         [Range(0, 100)]

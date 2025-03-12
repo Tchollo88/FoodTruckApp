@@ -6,9 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Models\Client\**" />
+    <EmbeddedResource Remove="Models\Client\**" />
+    <None Remove="Models\Client\**" />
+  </ItemGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
@@ -16,6 +23,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Menu\Images\" />
+	  <Folder Include="Migrations\" />
 	</ItemGroup>
 
 </Project>
