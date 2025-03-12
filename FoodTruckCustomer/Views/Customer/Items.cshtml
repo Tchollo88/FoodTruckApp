@@ -65,14 +65,12 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-<<<<<<< HEAD
                         @Html.DisplayFor(modelItem => item.Category)
                     </td>
                     <td>
                         <a asp-controller="CartController" asp-action="Create" asp-route-id="@item.Item_ID">Add to Cart</a> |
                         <a asp-controller="CustomerController" asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |
 
-=======
                         @Html.DisplayFor(modelItem => item.Price)
                     </td>
                     <th>
@@ -92,7 +90,6 @@
                             <input type="hidden" name="itemId" value="@item.Item_ID" />
                             <button type="submit">Add to Cart</button>
                         </form>
->>>>>>> Todd-Checkpoint
                     </td>
                 </tr>
             }
