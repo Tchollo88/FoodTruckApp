@@ -17,6 +17,7 @@ namespace Repository.Models.Menu
 
         [Required, Column(TypeName = "decimal(10,2)")]
         public decimal TotalPrice { get; set; }
+
         [Required]
         public DateTime Date { get; set; } = DateTime.UtcNow;
     }
