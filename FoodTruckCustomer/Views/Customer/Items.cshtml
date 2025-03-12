@@ -24,13 +24,16 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-				@Html.DisplayNameFor(model => model.Special)
+				@Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
-				@Html.DisplayNameFor(model => model.Discount)
+				@Html.DisplayNameFor(model => model.Image)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.OnSale)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountPercentage)
             </th>
 			<th>
             </th>
@@ -57,14 +60,17 @@
                         @Html.DisplayFor(modelItem => item.Price)
                     </td>
                     <th>
-                        @Html.DisplayFor(model => item.Special)
+                        @Html.DisplayFor(model => item.Category)
                     </th>
                     <th>
-                        @Html.DisplayFor(model => item.Discount)
+                        @Html.DisplayFor(model => item.Image)
                     </th>
 					<td>
-						@Html.DisplayFor(modelItem => item.Category)
+						@Html.DisplayFor(modelItem => item.OnSale)
 					</td>
+                    <td>
+						@Html.DisplayFor(modelItem => item.DiscountPercentage)
+                    </td>
                     <td>
                         <form asp-controller="CartController" asp-action="Create" method="post">
                             <input type="hidden" name="itemId" value="@item.Item_ID" />

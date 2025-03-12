@@ -34,10 +34,7 @@ namespace FoodTruckCustomer.Controllers
         }
 
         // POST: Receipts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Receipt_ID,Order_ID,TotalPrice,Date")] Receipt receipt)
         {
             if (ModelState.IsValid)
