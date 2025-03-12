@@ -7,8 +7,9 @@ namespace Repository.Data
     {
         Task<IEnumerable<Item>> GetAllItemsAsync();
         Task<Item> GetItemByIdAsync(int id);
-        Task AddItemAsync(Order amount);
-        Task UpdateItemAsync(Order amount);
+        Task AddItemAsync(Order item);
+        Task<bool> SubtractItemAsync(int orderId);
         Task DeleteItemAsync(int id);
+        Task CheckoutAsync(List<Order> order);
     }
 }
