@@ -25,7 +25,6 @@ namespace FoodTruckCustomer.Controllers
         // GET: Cart
         public async Task<IActionResult> Index()
         {
-
             return View();
         }
         public async Task<IActionResult> Cart()

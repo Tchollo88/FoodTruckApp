@@ -17,11 +17,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ICustomerRepo, CustomerRepo>();
+builder.Services.AddTransient<ApplicationDbSeeder>(); // Register the seeder as a transient service
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseMigrationsEndPoint();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
 }
@@ -35,5 +40,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<ApplicationDbSeeder>();
+    await seeder.SeedAsync(); // Seed the database with sample data
+}
 
 app.Run();

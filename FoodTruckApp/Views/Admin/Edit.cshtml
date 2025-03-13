@@ -13,7 +13,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Item_ID" />
             <div class="form-group">
@@ -44,6 +44,21 @@
                 <span asp-validation-for="OnSale" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Image" class="control-label">Current Image</label>
+                @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                    <img src="~/menu/images/@Model.Image" alt="@Model.Name" style="max-width: 200px; height: auto;" />
+                }
+                else
+                {
+                    <p>No image available</p>
+                }
+            </div>
+            <div class="form-group">
+                <label class="control-label">Upload New Image</label>
+                <input type="file" name="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif" />
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -55,5 +70,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

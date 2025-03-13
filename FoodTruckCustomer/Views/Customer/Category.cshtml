@@ -1,0 +1,105 @@
+﻿@using Repository.Models.Menu
+@using FoodTruckCustomer.Controllers
+@{
+    Layout = "_Layout";
+}
+@model IEnumerable<Repository.Models.Menu.Item>
+
+@{
+    ViewData["Title"] = "Category";
+}
+
+<h1>@ViewBag.param</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountPercentage).Insert(8, " ")
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tr>
+        <td>
+            <div class="col-md-6">
+                <form asp-action="NameSearch" method="get" class="form-control">
+                    <input type="search" name="Name" placeholder="Search by Name" />
+                    <input type="submit" value="Search" class="btn btn-primary" />
+                </form>
+            </div>
+        </td>
+        <td></td> <!-- Empty cell for Price -->
+        <td></td> <!-- Empty cell for Description -->
+        <td>
+            <div class="col-md-6">
+                <form asp-action="Category" method="get" class="form-control">
+                    @Html.DropDownList("Category", new SelectList(Model.Select(c => c.Category).Distinct()), "All")
+                    <input type="submit" value="Filter" class="btn btn-primary" />
+                </form>
+            </div>
+        </td>
+        <td></td> <!-- Empty cell for Image -->
+        <td></td> <!-- Empty cell for Discount -->
+    </tr>
+    <tbody>
+
+        @if (Model == null)
+        {
+            <tr>
+                <td> @Html.Display("No items available")</td>
+            </tr>
+        }
+        else
+        @foreach (var item in Model.Where(i => i.Category == ViewBag.param))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Image)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountPercentage)%
+                </td>
+                <td>
+                    <form asp-controller="Cart" asp-action="Create" method="post">
+                        <input type="hidden" name="itemId" value="@item.Item_ID" />
+                        <input type="number" name="Qty" min="1" value="1"/>
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    <a asp-action="Items">Back to List</a>
+</p>
