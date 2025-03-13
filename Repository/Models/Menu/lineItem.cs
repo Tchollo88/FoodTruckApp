@@ -14,14 +14,14 @@ namespace Repository.Models.Menu
         [Key]
         public int lineItem_ID { get; set; }
 
-        [ForeignKey("Item")]
+        [Required, ForeignKey("Item")]
         public int Item_ID { get; set; }
         public virtual Item? Item { get; set; }
 
-        public int Quantity { get; set; }
-      
-        [ForeignKey("Order")]
+        [Required, ForeignKey("Order")]
         public int Order_ID { get; set; }
         public virtual Order? Order { get; set; }
+
+        public int Quantity { get; set; }
     }
 }

@@ -33,10 +33,7 @@
 				@Html.DisplayNameFor(model => model.Image)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OnSale)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiscountPercentage)
+                @Html.DisplayNameFor(model => model.DiscountPercentage).Insert(8, " ")
             </th>
 			<th>
             </th>
@@ -54,13 +51,12 @@
             @foreach (var item in Model)
             {
                 <tr>
-                            <td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Image)
-                            </td>
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
@@ -73,16 +69,13 @@
                     <th>
                         @Html.DisplayFor(model => item.Category)
                     </th>
-					<td>
-						@Html.DisplayFor(modelItem => item.OnSale)
-					</td>
                     <td>
-						@Html.DisplayFor(modelItem => item.DiscountPercentage)
+                        @Html.DisplayFor(modelItem => item.DiscountPercentage)%
                     </td>
                     <td>
                         <form asp-controller="Cart" asp-action="Create" method="post">
                             <input type="hidden" name="itemId" value="@item.Item_ID" />
-                            <input type="number" name="Qty" value="1"/>
+                            <input type="number" name="Qty" min="1"/>
                             <button type="submit">Add to Cart</button>
                         </form>
                     </td>
@@ -91,4 +84,4 @@
     </tbody>
 </table>
 <div>
-    <a asp-controller="CartController" asp-action="Cart">Back to Cart</a>
+    <a asp-controller="Cart" asp-action="Cart">Back to Cart</a>

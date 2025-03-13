@@ -1,48 +1,51 @@
-﻿@model IEnumerable<Repository.Models.Menu.lineItem>
+﻿@model IEnumerable<Repository.Models.Menu.Order>
 
 @{
     ViewData["Title"] = "Cart";
 }
 
-<h1>Index</h1>
+<h2>Shopping Cart</h2>
 
-@if (!Model.Any())
-{
-    <p>Your cart is empty.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Items</th>
+            <th>Subtotal ($)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Item)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Quantity)
-                </th>
+                <td>@order.Order_ID</td>
+                <td>
+                    <ul>
+                        @foreach (var item in order.LineItems)
+                        {
+                            <li>@item.Item.Name - Quantity: @item.Quantity - Price: $@(item.Item.Price * item.Quantity)</li>
+                        }
+                    </ul>
+                </td>
+                <td>@order.SubTotal.ToString("C")</td>
+                <td>
+                    <form asp-action="AdjustCountAsync" method="post">
+                        <input type="hidden" name="orderId" value="@order.Order_ID" />
+                        <label for="itemId">Item:</label>
+                        <select name="itemId" required>
+                            @foreach (var item in ViewBag.Items)
+                            {
+                                <option value="@item.Item_ID">@item.Name - $@item.Price</option>
+                            }
+                        </select>
+                        <label for="qty">Quantity:</label>
+                        <input type="number" name="qty" min="-100" required />
+                        <button type="submit">Adjust Item Count</button>
+                    </form>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Item.Item_ID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Quantity)
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        <a asp-action="SingleAddAsync" asp-route-id="@item.Order_ID">Add</a> |
-                        <a asp-action="SingleSubtractAsync" asp-route-id="@item.Order_ID">Subtract</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Order_ID">Remove</a>
-                    </td>
-                </tr>
-            }
-            @*         <a asp-action="Checkout" asp-route-id="@item.Order_ID">Checkout</a> *@
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
 }

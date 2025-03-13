@@ -13,10 +13,13 @@ namespace Repository.Models.Menu
         public int Order_ID { get; set; }
 
         public virtual ICollection<lineItem> LineItems { get; set; }
-        public decimal SubTotal()
-        {
-            return this.LineItems.Sum(x => x.Item.Price * x.Quantity);
-        }
 
+        public decimal SubTotal
+        {
+            get 
+            { 
+                return LineItems.Sum(li => li.Quantity * (li.Item?.Price ?? 0)); 
+            }
+        }
     }
 }

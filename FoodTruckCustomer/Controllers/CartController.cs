@@ -25,8 +25,19 @@ namespace FoodTruckCustomer.Controllers
         // GET: Cart
         public async Task<IActionResult> Index()
         {
-            var cartOrders = await _context.Orders.ToListAsync();
-            return View(cartOrders);
+
+            return View();
+        }
+        public async Task<IActionResult> Cart()
+        {
+            var orders = await _context.Orders
+                .Include(o => o.LineItems)
+                .ThenInclude(li => li.Item)
+                .ToListAsync();
+
+            ViewBag.Items = await _context.Items.ToListAsync();
+
+            return View(orders);
         }
 
         public IActionResult Create()
@@ -35,42 +46,71 @@ namespace FoodTruckCustomer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(int itemId, int orderId, [Bind("Quantity")] lineItem lineItem)
+        public async Task<IActionResult> Create(int itemId, int qty)
         {
-            if (ModelState.IsValid)
+            if (qty <= 0)
             {
-                lineItem.Item_ID = itemId;
-                lineItem.Order_ID = orderId;
-
-                _context.Add(lineItem);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Create","Cart"); // Redirect to Cart view
+                return BadRequest("Quantity must be greater than zero.");
             }
-            return View(lineItem);
+
+            var item = await _context.Items.FindAsync(itemId);
+            var newOrder = new Order
+            {
+                LineItems = new List<lineItem>()
+            };
+
+            var newLineItem = new lineItem
+            {
+                Item_ID = itemId,
+                Quantity = qty,
+                Item = item,
+                Order = newOrder
+            };
+
+            newOrder.LineItems.Add(newLineItem);
+            _context.Orders.Add(newOrder);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Items", "Customer");
         }
 
-            [HttpPost]
-        public async Task<IActionResult> SingleAddAsync([Bind("Order_ID")] Order order) 
+
+        [HttpPost]
+        public async Task<IActionResult> AdjustCountAsync(int lineItemId, int qtyChange)
         {
-            if (ModelState.IsValid)
+            var lineItem = await _context.lineItems
+                .Include(li => li.Order)
+                .Include(li => li.Item)
+                .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
+
+            if (lineItem == null)
             {
-                var existingOrder = await _context.lineItems.FindAsync(order.Order_ID);
-                if (existingOrder != null)
+                return NotFound("Line item not found.");
+            }
+
+            lineItem.Quantity += qtyChange;
+
+            if (lineItem.Quantity <= 0)
+            {
+                var order = lineItem.Order;
+                order.LineItems.Remove(lineItem);
+                _context.lineItems.Remove(lineItem);
+
+                if (!order.LineItems.Any())
                 {
-                    existingOrder.Quantity += 1; // Increment Quantity by 1
-                    _context.Update(existingOrder);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    _context.Orders.Remove(order);
                 }
             }
-            return View(Index);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Cart", "Cart");
         }
 
         [HttpPost]
         public async Task<IActionResult> SingleSubtractAsync(int orderId)
         {
             await _CustomerRepo.SubtractItemAsync(orderId);
-            return RedirectToAction(nameof(Index)); // Refresh cart page
+            return RedirectToAction("Cart", "Cart"); 
         }
 
         // GET: Cart/Delete/5
