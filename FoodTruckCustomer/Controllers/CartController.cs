@@ -74,6 +74,17 @@ namespace FoodTruckCustomer.Controllers
             return RedirectToAction("Items", "Customer");
         }
 
+        public IActionResult TransferView()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult TransferViewPost()
+        {
+            return RedirectToAction("Items", "Customer");
+        }
+
         [HttpGet]
         public async Task<IActionResult> AdjustCount(int lineItemId)
         {
@@ -130,27 +141,19 @@ namespace FoodTruckCustomer.Controllers
                 .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
 
             var order = lineItem.Order;
-            var clearID = lineItem.Order_ID;
-            if (order != null)
+            lineItem.Quantity = 0;
+            if (lineItem.Quantity <= 0)
             {
-                order.LineItems.Remove(lineItem);                
+                order = lineItem.Order;
+                order.LineItems.Remove(lineItem);
                 _context.lineItems.Remove(lineItem);
-                
-                lineItem.Order_ID = null;
-                lineItem.Order = null;
-            }
-            else if (!order.LineItems.Any())
-            {
-                _context.Orders.Remove(order);
 
-                foreach (var item in order.LineItems)
+                if (!order.LineItems.Any())
                 {
-                    item.Order_ID = null;
+                    _context.Orders.Remove(order);
                 }
-
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Items", "Customer");
             }
+
             await _context.SaveChangesAsync();
             return RedirectToAction("Cart", "Cart");
         }

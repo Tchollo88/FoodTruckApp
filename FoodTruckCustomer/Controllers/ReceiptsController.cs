@@ -26,6 +26,8 @@ namespace FoodTruckCustomer.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+
+
         // GET: Receipts/Create
         public IActionResult Create()
         {

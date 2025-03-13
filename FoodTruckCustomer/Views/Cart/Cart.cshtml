@@ -19,26 +19,29 @@
         @foreach (var order in Model)
         {
             <tr>
+                @foreach (var item in order.LineItems)
+                {
+                    <td>@item.lineItem_ID</td>
+                }
                 <td>@order.Order_ID</td>
                 <td>
-                    <ul>
-                        @foreach (var item in order.LineItems)
-                        {
+                    @foreach (var item in order.LineItems)
+                    {
+                        <ul>
                             <li>@item.Item.Name - Quantity: @item.Quantity - Price: $@(item.Item.Price * item.Quantity)</li>
-                        }
-                    </ul>
+                        </ul>
+                    }
                 </td>
                 <td>@order.SubTotal.ToString("C")</td>
                 <td>
                     @foreach (var item in order.LineItems)
                     {
-                        <form asp-action="AdjustCount" asp-controller="Cart" asp-route-lineItemId="@item.lineItem_ID"@*  class="btn btn-warning" *@ method="post">
+                        <form asp-action="AdjustCount" asp-controller="Cart" asp-route-lineItemId="@item.lineItem_ID" method="post">
                            <input type="hidden" name="orderId" value="@order.Order_ID" />
                            <label for="qty">Quantity:</label>
                            <input type="number" name="qty" min="-100" max="100" required />
                             <form>
-                               <button type="submit">[ + ]</button>
-                               <button type="submit">[ - ]</button>                               
+                               <button type="submit">[Adjust Item Count]</button>                             
                             </form>                           
                         </form>
                         <div>
@@ -52,5 +55,8 @@
             </tr>
         }
     </tbody>
+    <form asp-action="TransferViewPost" method="post">
+        <button type="submit">Return to Menu</button>
+    </form>
 </table>
 

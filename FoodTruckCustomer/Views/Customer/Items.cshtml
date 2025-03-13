@@ -21,16 +21,13 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-				@Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-				@Html.DisplayNameFor(model => model.Image)
+				@Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DiscountPercentage).Insert(8, " ")
@@ -52,7 +49,14 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Image)
+                        @if (!string.IsNullOrEmpty(item.Image))
+                        {
+                            <img src="~/menu/images/@item.Image" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span>No image</span>
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
@@ -61,13 +65,10 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Category)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.Price)
                     </td>
                     <th>
-                        @Html.DisplayFor(model => item.Category)
+                        @Html.DisplayFor(modelItem => item.Category)
                     </th>
                     <td>
                         @Html.DisplayFor(modelItem => item.DiscountPercentage)%
