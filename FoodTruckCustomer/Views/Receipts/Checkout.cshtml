@@ -1,0 +1,48 @@
+﻿@using Repository.Models.Menu;
+@using FoodTruckCustomer.Controllers;
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+@model Repository.Models.Menu.Receipt
+
+<h2>Receipt</h2>
+
+<p><strong>Receipt ID:</strong> @Model.Receipt_ID</p>
+<p><strong>Order ID:</strong> @Model.Order_ID</p>
+<p><strong>Date:</strong> @Model.Date.ToString("f")</p>
+
+@if (Model.Order != null && Model.Order.LineItems.Any())
+{
+    <h3>Order Details</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Order.LineItems)
+            {
+                <tr>
+                    <td>@item.Item.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Item.Price.ToString("C")</td>
+                    <td>@(item.Quantity * item.Item.Price).ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3>Total Price: @Model.TotalPrice.ToString("C")</h3>
+}
+else
+{
+    <p>No order details available.</p>
+}
+
+<a asp-action="Index" asp-controller="Home">Return to Home</a>

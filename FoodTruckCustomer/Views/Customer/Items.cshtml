@@ -14,6 +14,7 @@
 <table class="table">
     <thead>
         <tr>
+            <td></td> <!-- Empty cell for Image -->
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -27,9 +28,6 @@
 				@Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
-				@Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DiscountPercentage).Insert(8, " ")
             </th>
 			<th>
@@ -37,6 +35,7 @@
         </tr>
     </thead>
     <tr>
+        <td></td> <!-- Empty cell for Image -->
         <td>
             <div class="col-md-6">
                 <form asp-action="NameSearch" method="get" class="form-control">
@@ -55,7 +54,6 @@
                 </form>
             </div>
         </td>
-        <td></td> <!-- Empty cell for Image -->
         <td></td> <!-- Empty cell for Discount -->
     </tr>
     <tbody>
@@ -71,6 +69,16 @@
             {
                 <tr>
                     <td>
+                      @if (!string.IsNullOrEmpty(item.Image))
+                        {
+                            <img src="~/menu/images/@item.Image" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span>No image</span>
+                        }
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
@@ -83,13 +91,10 @@
                         @Html.DisplayFor(modelItem => item.Category)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Image)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.DiscountPercentage)%
                     </td>
                     <td>
-                        <form asp-controller="Cart" asp-action="Create" method="post">
+                        <form asp-action="Create" asp-controller="Cart" method="post">
                             <input type="hidden" name="itemId" value="@item.Item_ID" />
                             <input type="number" name="Qty" min="1" value="1" />
                             <button type="submit">Add to Cart</button>
