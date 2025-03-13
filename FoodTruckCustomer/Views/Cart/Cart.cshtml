@@ -1,4 +1,11 @@
-﻿@model IEnumerable<Repository.Models.Menu.Order>
+﻿@using Repository.Models.Menu;
+@using FoodTruckCustomer.Controllers;
+
+﻿@{
+    Layout = "_Layout";
+}
+
+@model IEnumerable<Repository.Models.Menu.Order>
 
 @{
     ViewData["Title"] = "Cart";
@@ -9,21 +16,20 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Order ID</th>
+            <th>Order Number</th>
             <th>Items</th>
             <th>Subtotal ($)</th>
             <th>Actions</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
+    @foreach (var order in Model)
+    {
+        <tbody>
             <tr>
                 @foreach (var item in order.LineItems)
                 {
                     <td>@item.lineItem_ID</td>
                 }
-                <td>@order.Order_ID</td>
                 <td>
                     @foreach (var item in order.LineItems)
                     {
@@ -37,12 +43,10 @@
                     @foreach (var item in order.LineItems)
                     {
                         <form asp-action="AdjustCount" asp-controller="Cart" asp-route-lineItemId="@item.lineItem_ID" method="post">
-                           <input type="hidden" name="orderId" value="@order.Order_ID" />
-                           <label for="qty">Quantity:</label>
-                           <input type="number" name="qty" min="-100" max="100" required />
-                            <form>
-                               <button type="submit">[Adjust Item Count]</button>                             
-                            </form>                           
+                            <input type="hidden" name="orderId" value="@order.Order_ID" />
+                            <label for="qty">Quantity:</label>
+                            <input type="number" name="qty" min="-100" max="100" required />
+                            <button type="submit">[Adjust Item Count]</button>
                         </form>
                         <div>
                             <form asp-action="Delete" asp-controller="Cart" method="post" style="display:inline;">
@@ -53,10 +57,24 @@
                     }
                 </td>
             </tr>
-        }
-    </tbody>
-    <form asp-action="TransferViewPost" method="post">
-        <button type="submit">Return to Menu</button>
-    </form>
+        </tbody>
+    }
+    <tfoot>
+        <tr>
+            <td colspan="2"><strong>Total:</strong></td>
+            <td><strong>@Model.Sum(o => o.SubTotal).ToString("C")</strong></td>
+            <td>
+                <!-- Checkout Form -->
+                <form asp-action="Checkout" asp-controller="Receipts" method="post">
+                    <input type="hidden" name="orderId" value="@order.Order_ID" />
+                    <button type="submit" class="btn btn-primary">Checkout</button>
+                </form>
+            </td>
+        </tr>
+    </tfoot>
 </table>
+
+<form asp-action="TransferViewPost" method="post">
+    <button type="submit">Return to Menu</button>
+</form>
 

@@ -74,7 +74,7 @@
                         @Html.DisplayFor(modelItem => item.DiscountPercentage)%
                     </td>
                     <td>
-                        <form asp-controller="Cart" asp-action="Create" method="post">
+                        <form asp-action="Create" asp-controller="Cart" method="post">
                             <input type="hidden" name="itemId" value="@item.Item_ID" />
                             <input type="number" name="Qty" min="1"/>
                             <button type="submit">Add to Cart</button>
