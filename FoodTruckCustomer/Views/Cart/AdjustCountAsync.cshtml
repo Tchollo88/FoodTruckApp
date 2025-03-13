@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Repository.Models.Menu.Order>
+
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<h2>Your Cart</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Items</th>
+            <th>Subtotal ($)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Order_ID</td>
+                <td>
+                    <ul>
+                        @foreach (var item in order.LineItems)
+                        {
+                            <li>
+                                @item.Item.Name - 
+                                Quantity: @item.Quantity - 
+                                Price: $@(item.Item.Price * item.Quantity)
+
+                                <form asp-action="AdjustCountAsync" asp-controller="Cart" method="post" style="display:inline;">
+                                    <input type="hidden" name="lineItemId" value="@item.lineItem_ID" />
+                                    <input type="hidden" name="qtyChange" value="1" />
+                                    <button type="submit">[ + ]</button>
+                                </form>
+
+                                <form asp-action="AdjustCountAsync" asp-controller="Cart" method="post" style="display:inline;">
+                                    <input type="hidden" name="lineItemId" value="@item.lineItem_ID" />
+                                    <input type="hidden" name="qtyChange" value="-1" />
+                                    <button type="submit">[ - ]</button>
+                                </form>
+                            </li>
+                        }
+                    </ul>
+                </td>
+                <td>@order.SubTotal.ToString("C")</td>
+                <td>
+                    <a asp-action="Checkout" asp-controller="Cart" class="btn btn-primary">Checkout</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

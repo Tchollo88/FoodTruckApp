@@ -40,9 +40,13 @@
                             }
                         </select>
                         <label for="qty">Quantity:</label>
-                        <input type="number" name="qty" min="-100" required />
-                        <button type="submit">Adjust Item Count</button>
+                        <input type="number" name="qty" min="1" required />
+                       <form>
+                            <button type="submit">[ + ]</button>
+                            <button type="submit">[ - ]</button>
+                       </form>
                     </form>
+
                 </td>
             </tr>
         }
