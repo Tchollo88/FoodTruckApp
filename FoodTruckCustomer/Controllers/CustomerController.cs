@@ -26,5 +26,27 @@ namespace FoodTruckCustomer.Controllers
             var items = await _CustomerRepo.GetAllItemsAsync();
             return View(items);
         }
+
+        public async Task<IActionResult> Category(string category)
+        {
+            ViewBag.param = category;
+            var categories = await _CustomerRepo.GetAllItemsAsync();
+            if (category == null)
+            {
+                return RedirectToAction(nameof(Items));
+            }
+            return View(categories);
+        }
+
+        public async Task<IActionResult> NameSearch(string name)
+        {
+            ViewBag.param = name;
+            var names = await _CustomerRepo.GetAllItemsAsync();
+            if (name == null)
+            {
+                return RedirectToAction(nameof(Items));
+            }
+            return View(names);
+        }
     }
 }

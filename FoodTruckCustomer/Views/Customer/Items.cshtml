@@ -15,9 +15,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -39,6 +36,29 @@
             </th>
         </tr>
     </thead>
+    <tr>
+        <td>
+            <div class="col-md-6">
+                <form asp-action="NameSearch" method="get" class="form-control">
+                    <input type="search" name="Name" placeholder="Search by Name" />
+                    <input type="submit" value="Search" class="btn btn-primary" />
+                </form>
+            </div>
+        </td>
+        <td></td> <!-- Empty cell for Price -->
+        <td></td> <!-- Empty cell for Description -->
+        <td>
+            <div class="col-md-6">
+                <form asp-action="Category" method="get" class="form-control">
+                    @Html.DropDownList("Category", new SelectList(Model.Select(c => c.Category).Distinct()), "All")
+                    <input type="submit" value="Filter" class="btn btn-primary" />
+                </form>
+            </div>
+        </td>
+        <td></td> 
+        <td></td> <!-- Empty cell for Actions -->
+        <td></td> <!-- Empty cell for Image -->
+    </tr>
     <tbody>
         
         @if (Model == null)
