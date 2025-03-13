@@ -9,6 +9,8 @@ namespace Repository.Models.Menu
         [Key]
         public int Item_ID { get; set; }
 
+        public string Image { get; set; } = string.Empty;
+
         [Required]
         public string Name { get; set; } = string.Empty;
 
@@ -18,8 +20,6 @@ namespace Repository.Models.Menu
         public string Description { get; set; } = string.Empty;
         [Required]
         public string Category { get; set; } = string.Empty;
-
-        public string Image { get; set; } = string.Empty;
 
         public bool OnSale { get; set; } = false;
 
