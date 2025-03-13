@@ -30,26 +30,27 @@
                 </td>
                 <td>@order.SubTotal.ToString("C")</td>
                 <td>
-                    <form asp-action="AdjustCountAsync" method="post">
-                        <input type="hidden" name="orderId" value="@order.Order_ID" />
-                        <label for="itemId">Item:</label>
-                        <select name="itemId" required>
-                            @foreach (var item in ViewBag.Items)
-                            {
-                                <option value="@item.Item_ID">@item.Name - $@item.Price</option>
-                            }
-                        </select>
-                        <label for="qty">Quantity:</label>
-                        <input type="number" name="qty" min="1" required />
-                       <form>
-                            <button type="submit">[ + ]</button>
-                            <button type="submit">[ - ]</button>
-                       </form>
-                    </form>
-
+                    @foreach (var item in order.LineItems)
+                    {
+                        <form asp-action="AdjustCount" asp-controller="Cart" asp-route-lineItemId="@item.lineItem_ID"@*  class="btn btn-warning" *@ method="post">
+                           <input type="hidden" name="orderId" value="@order.Order_ID" />
+                           <label for="qty">Quantity:</label>
+                           <input type="number" name="qty" min="-100" max="100" required />
+                            <form>
+                               <button type="submit">[ + ]</button>
+                               <button type="submit">[ - ]</button>                               
+                            </form>                           
+                        </form>
+                        <div>
+                            <form asp-action="Delete" asp-controller="Cart" method="post" style="display:inline;">
+                                <input type="hidden" name="lineItemId" value="@item.lineItem_ID" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
-}
+

@@ -74,21 +74,25 @@ namespace FoodTruckCustomer.Controllers
             return RedirectToAction("Items", "Customer");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> AdjustCount(int lineItemId)
+        {
+             var lineItem = await _context.lineItems
+                .Include(li => li.Item)
+                .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
+
+            return View(lineItem);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> AdjustCountAsync(int lineItemId, int qtyChange)
+        public async Task<IActionResult> AdjustCountAsync(int lineItemId, int qty)
         {
             var lineItem = await _context.lineItems
                 .Include(li => li.Order)
                 .Include(li => li.Item)
                 .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
 
-            if (lineItem == null)
-            {
-                return NotFound("Line item not found.");
-            }
-
-            lineItem.Quantity += qtyChange;
+            lineItem.Quantity += qty;
 
             if (lineItem.Quantity <= 0)
             {
@@ -106,43 +110,49 @@ namespace FoodTruckCustomer.Controllers
             return RedirectToAction("Cart", "Cart");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SingleSubtractAsync(int orderId)
-        {
-            await _CustomerRepo.SubtractItemAsync(orderId);
-            return RedirectToAction("Cart", "Cart"); 
-        }
-
         // GET: Cart/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? lineItemId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var lineItem = await _context.lineItems
+                            .Include(li => li.Item)
+                            .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
 
-            var order = await _context.Orders
-                .FirstOrDefaultAsync(m => m.Order_ID == id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return View(order);
+            return View(lineItem);
         }
 
         // POST: Cart/Delete/5
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int lineItemId)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var lineItem = await _context.lineItems
+                .Include(li => li.Order)
+                .Include(li => li.Item)
+                .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
+
+            var order = lineItem.Order;
+            var clearID = lineItem.Order_ID;
             if (order != null)
             {
-                _context.Orders.Remove(order);
+                order.LineItems.Remove(lineItem);                
+                _context.lineItems.Remove(lineItem);
+                
+                lineItem.Order_ID = null;
+                lineItem.Order = null;
             }
+            else if (!order.LineItems.Any())
+            {
+                _context.Orders.Remove(order);
 
+                foreach (var item in order.LineItems)
+                {
+                    item.Order_ID = null;
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Items", "Customer");
+            }
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Cart", "Cart");
         }
 
         private bool OrderExists(int id)
