@@ -20,7 +20,6 @@
             <th>Items</th>
             <th>Subtotal ($)</th>
             <th>Actions</th>
-			<td></td> @*-- Empty cell for Delete -->*@
         </tr>
     </thead>
     @foreach (var order in Model)
@@ -43,17 +42,12 @@
                 @foreach (var item in order.LineItems)
                 {
                     <td>
-                        <form asp-action="AdjustCount" asp-controller="Cart" asp-route-lineItemId="@item.lineItem_ID" method="post">
+                        <form class="row justify-content-between">
                             <input type="hidden" name="orderId" value="@order.Order_ID" />
                             <label for="qty">Quantity:</label>
                             <input type="number" name="qty" min="-100" max="100" required />
-                            <button type="submit"  class="float-left">[Adjust Item Count]</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form asp-action="Delete" asp-controller="Cart" method="post" style="display:inline;" id="delete">
-                            <input type="hidden" id="delete" name="lineItemId" value="@item.lineItem_ID" />
-                            <button type="submit" class="btn btn-danger align-items-center align-items-lg-stretch" id="delete" onclick="Delete">Delete</button>
+                            <input asp-action="AdjustCount" asp-controller="Cart" asp-route-lineItemId="@item.lineItem_ID" method="post" type="submit" class="col-6 btn btn-primary" value="[Adjust Item Count]">
+                            <input type="button" asp-action="Delete" asp-controller="Cart" name="lineItemId" asp-route-lineItemId="@item.lineItem_ID" class="col-3 btn btn-danger" method="post" value="Delete">
                         </form>
                     </td>
                 } 
