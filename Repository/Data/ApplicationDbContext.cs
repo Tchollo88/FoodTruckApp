@@ -19,5 +19,6 @@ namespace Repository.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<lineItem> lineItems { get; set; }
     }
 }
