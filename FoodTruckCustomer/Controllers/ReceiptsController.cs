@@ -26,25 +26,53 @@ namespace FoodTruckCustomer.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Receipts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Receipt(int receiptId)
         {
-            ViewData["Order_ID"] = new SelectList(_context.Orders, "Order_ID", "Order_ID");
-            return View();
+            var receipt = await _context.Receipts
+                .Include(r => r.Order)
+                    .ThenInclude(o => o.LineItems)
+                        .ThenInclude(li => li.Item)
+                .FirstOrDefaultAsync(r => r.Receipt_ID == receiptId);
+
+            return View(receipt);
         }
 
-        // POST: Receipts/Create
-        [HttpPost]
-        public async Task<IActionResult> Create([Bind("Receipt_ID,Order_ID,TotalPrice,Date")] Receipt receipt)
+        public async Task<IActionResult> Checkout()
         {
-            if (ModelState.IsValid)
+            var order = await _context.Orders
+                .Include(o => o.LineItems)
+                    .ThenInclude(li => li.Item)
+                .FirstOrDefaultAsync();
+
+            if (order == null || !order.LineItems.Any())
             {
-                _context.Add(receipt);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Cart", "Cart");
             }
-            ViewData["Order_ID"] = new SelectList(_context.Orders, "Order_ID", "Order_ID", receipt.Order_ID);
-            return View(receipt);
+
+            return View(order);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckoutPost(int orderId)
+        {
+            var order = await _context.Orders
+                .Include(o => o.LineItems)
+                    .ThenInclude(li => li.Item)
+                .FirstOrDefaultAsync(o => o.Order_ID == orderId);
+
+            var receipt = new Receipt
+            {
+                Order_ID = order.Order_ID,
+                Order = order,
+                Date = DateTime.UtcNow
+            };
+
+
+            _context.Receipts.Add(receipt);
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Checkout", new { receiptId = receipt.Receipt_ID });
         }
 
         // GET: Receipts/Delete/5

@@ -13,166 +13,171 @@ namespace FoodTruckCustomer.Controllers
 {
     public class CartController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly ICustomerRepo _CustomerRepo;
 
-        public CartController(ApplicationDbContext context, ICustomerRepo customerRepo)
+        public CartController(ICustomerRepo customerRepo)
         {
-            _context = context;
             _CustomerRepo = customerRepo;
         }
 
         // GET: Cart
         public async Task<IActionResult> Index()
         {
-
             return View();
         }
-        public async Task<IActionResult> Cart()
+        
+        public async Task<IActionResult> Cart(int orderID)
         {
-            var orders = await _context.Orders
-                .Include(o => o.LineItems)
-                .ThenInclude(li => li.Item)
-                .ToListAsync();
-
-            ViewBag.Items = await _context.Items.ToListAsync();
-
-            return View(orders);
+            ViewBag.param = orderID;
+            var order = await _CustomerRepo.GetOrderByIdAsync(orderID);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return View(order);
         }
 
-        public IActionResult Create()
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> Create(int itemId, int qty, int orderID)
+        {
+            var item = await _CustomerRepo.GetItemByIdAsync(itemId);
+            if (qty <= 0)
+            {
+                order = new Order { LineItems = new List<lineItem>() }; // Initialize new order with empty LineItems list
+                await _CustomerRepo.AddItemAsync(order); // Save new order to the database
+            }
+            var order = await _CustomerRepo.GetOrderByIdAsync(orderID);
+            if (order.LineItems.Count == 0)
+            {
+                order.LineItems.Add
+                (
+                    new lineItem
+                    {
+                        Item_ID = item.Item_ID,
+                        Item = item,
+                        Order_ID = orderID,
+                        Order = order,
+                        Quantity = qty
+                    }
+                );
+                await _CustomerRepo.UpdateOrderAsync(order);
+            }
+            else
+            {
+                var existingOrder = order.LineItems.FirstOrDefault(o => o.Item_ID == item.Item_ID);
+                if (existingOrder != null)
+                {
+                    existingOrder.Quantity += qty;
+                    await _CustomerRepo.UpdateLineItemAsync(existingOrder);
+                }
+                else
+                {
+                    order.LineItems.Add
+                    (
+                        new lineItem 
+                        {
+                            Item_ID = item.Item_ID,
+                            Item = item, 
+                            Quantity = qty 
+                        }
+                    );
+                    await _CustomerRepo.UpdateOrderAsync(order);
+                }
+            }
+            return RedirectToAction("Items", "Customer", new { orderID = orderID });
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> Create(int itemId, int qty)
+        //{
+        //    Item item = await _CustomerRepo.GetItemByIdAsync(itemId);
+        //    lineItem newLineItem = new lineItem
+        //    {
+        //        Item_ID = itemId,
+        //        Item = item,
+        //        Quantity = qty
+        //    };
+
+        //    if (qty <= 0)
+        //    {
+        //        return BadRequest("Quantity must be greater than zero.");
+        //    }
+
+        //    return RedirectToAction("Cart", "Cart", new { orderId = newOrder });
+        //}
+
+        public IActionResult TransferView()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(int itemId, int qty)
+        public IActionResult TransferViewPost(int orderID)
         {
-            if (qty <= 0)
-            {
-                return BadRequest("Quantity must be greater than zero.");
-            }
-
-            var item = await _context.Items.FindAsync(itemId);
-            var newOrder = new Order
-            {
-                LineItems = new List<lineItem>()
-            };
-
-            var newLineItem = new lineItem
-            {
-                Item_ID = itemId,
-                Quantity = qty,
-                Item = item,
-                Order = newOrder
-            };
-
-            newOrder.LineItems.Add(newLineItem);
-            _context.Orders.Add(newOrder);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Items", "Customer");
+            return RedirectToAction("Items", "Customer", new { orderID = orderID });
         }
 
         [HttpGet]
         public async Task<IActionResult> AdjustCount(int lineItemId)
         {
-             var lineItem = await _context.lineItems
-                .Include(li => li.Item)
-                .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
+             var lineItem = _CustomerRepo.GetLineItemByIdAsync(lineItemId);
 
             return View(lineItem);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdjustCountAsync(int lineItemId, int qty)
+        public async Task<IActionResult> AdjustCountAsync(int lineItemId, int qty, int orderID)
         {
-            var lineItem = await _context.lineItems
-                .Include(li => li.Order)
-                .Include(li => li.Item)
-                .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
+            ViewBag.param = orderID;
+            var lineItem = await _CustomerRepo.GetLineItemByIdAsync(lineItemId);
 
             lineItem.Quantity += qty;
 
             if (lineItem.Quantity <= 0)
             {
-                var order = lineItem.Order;
-                order.LineItems.Remove(lineItem);
-                _context.lineItems.Remove(lineItem);
-
-                if (!order.LineItems.Any())
-                {
-                    _context.Orders.Remove(order);
-                }
+                await _CustomerRepo.DeleteLineItemAsync(lineItemId);
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Cart", "Cart");
+            else
+            {
+                await _CustomerRepo.UpdateLineItemAsync(lineItem);
+            }
+            return RedirectToAction("Cart", "Cart", new { orderID = orderID});
         }
 
-        // GET: Cart/Delete/5
-        public async Task<IActionResult> Delete(int? lineItemId)
-        {
-            var lineItem = await _context.lineItems
-                            .Include(li => li.Item)
-                            .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
 
+
+
+        // GET: Cart/Delete/5
+        public async Task<IActionResult> Delete(int lineItemId)
+        {
+            var lineItem = _CustomerRepo.GetLineItemByIdAsync(lineItemId);
+            if (lineItem == null)
+            {
+                return NotFound();
+            }
             return View(lineItem);
         }
 
         // POST: Cart/Delete/5
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int lineItemId)
+        public async Task<IActionResult> DeleteConfirmed(int lineItemId, int orderID)
         {
-            var lineItem = await _context.lineItems
-                .Include(li => li.Order)
-                .Include(li => li.Item)
-                .FirstOrDefaultAsync(li => li.lineItem_ID == lineItemId);
-
-            var order = lineItem.Order;
-            var clearID = lineItem.Order_ID;
-            if (order != null)
-            {
-                order.LineItems.Remove(lineItem);                
-                _context.lineItems.Remove(lineItem);
-                
-                lineItem.Order_ID = null;
-                lineItem.Order = null;
-            }
-            else if (!order.LineItems.Any())
-            {
-                _context.Orders.Remove(order);
-
-                foreach (var item in order.LineItems)
-                {
-                    item.Order_ID = null;
-                }
-
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Items", "Customer");
-            }
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Cart", "Cart");
+            await _CustomerRepo.DeleteLineItemAsync(lineItemId);
+            return RedirectToAction("Cart", "Cart", new { orderID = orderID});
         }
 
-        private bool OrderExists(int id)
+        public async Task<IActionResult> Checkout(int id)
         {
-            return _context.Orders.Any(e => e.Order_ID == id);
-        }
-        public async Task<IActionResult> Checkout(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Orders
-                .FirstOrDefaultAsync(m => m.Order_ID == id);
+            var order = await _CustomerRepo.GetOrderByIdAsync(id);
             if (order == null)
             {
                 return NotFound();
             }
-
             return View(order);
         }
 
