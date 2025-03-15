@@ -5,7 +5,7 @@
     Layout = "_Layout";
 }
 
-@model IEnumerable<Repository.Models.Menu.Order>
+@model Repository.Models.Menu.Order
 
 @{
     ViewData["Title"] = "Cart";
@@ -16,58 +16,47 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Order Number</th>
+            <th>Order Number: @Model.Order_ID</th>
             <th>Items</th>
             <th>Subtotal ($)</th>
             <th>Actions</th>
-			<td></td> @*-- Empty cell for Delete -->*@
         </tr>
     </thead>
-    @foreach (var order in Model)
-    {
-        <tbody>
-            <tr>
-                @foreach (var item in order.LineItems)
-                {
-                    <td>@item.lineItem_ID</td>
-                }
+    <tbody>
+        @foreach (var lineItem in Model.LineItems)
+        {
+        <tr>
+            <td></td>
+            <td>
+                @lineItem.Item.Name - Quantity: @lineItem.Quantity
+            </td>
+            <td>
+                @(lineItem.Item.Price * lineItem.Quantity)
+            </td>
                 <td>
-                    @foreach (var item in order.LineItems)
-                    {
-                        <ul>
-                            <li>@item.Item.Name - Quantity: @item.Quantity - Price: $@(item.Item.Price * item.Quantity)</li>
-                        </ul>
-                    }
-                </td>
-                <td>@order.SubTotal.ToString("C")</td>
-                @foreach (var item in order.LineItems)
-                {
-                    <td>
-                        <form asp-action="AdjustCount" asp-controller="Cart" asp-route-lineItemId="@item.lineItem_ID" method="post">
-                            <input type="hidden" name="orderId" value="@order.Order_ID" />
-                            <label for="qty">Quantity:</label>
-                            <input type="number" name="qty" min="-100" max="100" required />
-                            <button type="submit"  class="float-left">[Adjust Item Count]</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form asp-action="Delete" asp-controller="Cart" method="post" style="display:inline;" id="delete">
-                            <input type="hidden" id="delete" name="lineItemId" value="@item.lineItem_ID" />
-                            <button type="submit" class="btn btn-danger align-items-center align-items-lg-stretch" id="delete" onclick="Delete">Delete</button>
-                        </form>
-                    </td>
-                } 
-            </tr>
-        </tbody>
-    }
+                <form asp-action="AdjustCount" asp-controller="Cart" method="post">
+                    <input type="hidden" name="lineItemId" value="@lineItem.lineItem_ID" />
+                    <input type="hidden" name="orderID" value="@ViewBag.param" />
+                    <button type="submit" name="qty" value="1" class="btn btn-primary"> [+] </button>
+                    <button type="submit" name="qty" value="-1" class="btn btn-primary"> [-] </button>
+                </form>
+                <form asp-action="Delete" asp-controller="Cart" method="post">
+                    <input type="hidden" name="lineItemId" value="@lineItem.lineItem_ID" />
+                    <input type="hidden" name="orderID" value="@ViewBag.param" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
     <tfoot>
         <tr>
             <td colspan="2"><strong>Total:</strong></td>
-            <td><strong>@Model.Sum(o => o.SubTotal).ToString("C")</strong></td>
+            <td><strong>@Model.LineItems.Sum(o => o.Item.Price*o.Quantity).ToString("C")</strong></td>
             <td>
                 <!-- Checkout Form -->
                 <form asp-action="Checkout" asp-controller="Receipts" method="post">
-                    @* <input type="hidden" name="orderId" value="@order.Order_ID" /> *@
+                    @* <input type="hidden" name="orderID" value="@order.Order_ID" /> *@
                     <button type="submit" class="btn btn-primary">Checkout</button>
                 </form>
             </td>
@@ -76,6 +65,6 @@
 </table>
 
 <form asp-action="TransferViewPost" method="post">
-    <button type="submit">Return to Menu</button>
+    <button type="submit" name="orderID" value="@ViewBag.param">Return to Menu</button>
 </form>
 

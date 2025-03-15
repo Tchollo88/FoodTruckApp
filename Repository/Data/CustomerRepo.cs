@@ -22,9 +22,9 @@ namespace Repository.Data
             return await _context.Items.FindAsync(id);
         }
 
-        public async Task AddItemAsync(Order amount)
+        public async Task AddOrderAsync(Order order)
         {
-            _context.Orders.Add(amount);
+            _context.Orders.Add(order);
             await _context.SaveChangesAsync();
         }
 
@@ -72,6 +72,50 @@ namespace Repository.Data
         public Task CheckoutAsync(List<Order> order)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Order> GetOrderByIdAsync(int id)
+        {
+            return await _context.Orders.
+                Where(o => o.Order_ID == id).
+                Include(li => li.LineItems).
+                ThenInclude(i => i.Item).
+                FirstOrDefaultAsync();
+        }
+
+        public async Task<lineItem> GetLineItemByIdAsync(int id)
+        {
+            return await _context.lineItems.
+                Where(li => li.lineItem_ID == id).
+                Include(i => i.Item).
+                FirstOrDefaultAsync();
+        }
+
+        public async Task DeleteLineItemAsync(int id)
+        {
+            var lineItem = await _context.lineItems.FindAsync(id);
+            if (lineItem != null)
+            {
+                _context.lineItems.Remove(lineItem);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateLineItemAsync(lineItem lineItem)
+        {
+            _context.Entry(lineItem).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddLineItemAsync(lineItem lineItem)
+        {
+            _context.lineItems.Add(lineItem);
+            await _context.SaveChangesAsync();
+        }
+        public async Task UpdateOrderAsync(Order order)
+        {
+            _context.Entry(order).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }
