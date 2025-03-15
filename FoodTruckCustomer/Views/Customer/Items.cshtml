@@ -25,12 +25,12 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+				@Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DiscountPercentage).Insert(8, " ")
             </th>
-            <th>
+			<th>
             </th>
         </tr>
     </thead>
@@ -40,7 +40,6 @@
             <div class="col-md-6">
                 <form asp-action="NameSearch" method="get" class="form-control">
                     <input type="search" name="Name" placeholder="Search by Name" />
-                    <input type="hidden" name="orderID" value="@ViewBag.param" />
                     <input type="submit" value="Search" class="btn btn-primary" />
                 </form>
             </div>
@@ -50,7 +49,6 @@
         <td>
             <div class="col-md-6">
                 <form asp-action="Category" method="get" class="form-control">
-                    <input type="hidden" name="orderID" value="@ViewBag.param" />
                     @Html.DropDownList("Category", new SelectList(Model.Select(c => c.Category).Distinct()), "All")
                     <input type="submit" value="Filter" class="btn btn-primary" />
                 </form>
@@ -59,7 +57,7 @@
         <td></td> <!-- Empty cell for Discount -->
     </tr>
     <tbody>
-
+        
         @if (Model == null)
         {
             <tr>
@@ -71,7 +69,7 @@
             {
                 <tr>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.Image))
+                      @if (!string.IsNullOrEmpty(item.Image))
                         {
                             <img src="~/menu/images/@item.Image" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
                         }
@@ -93,17 +91,20 @@
                         @Html.DisplayFor(modelItem => item.Category)
                     </td>
                     <td>
-                        @if (item.OnSale)
-                        {
-                            @Html.DisplayFor(modelItem => item.DiscountPercentage)
-                            <span>% off</span>
-                        }
+						@if (item.DiscountPercentage == 0)
+						{
+							<span>No discount</span>
+						}
+						else
+						{
+							<span>@item.DiscountPercentage %</span>
+						})
+                        @Html.DisplayFor(modelItem => item.DiscountPercentage)%
                     </td>
                     <td>
                         <form asp-action="Create" asp-controller="Cart" method="post">
                             <input type="hidden" name="itemId" value="@item.Item_ID" />
                             <input type="number" name="Qty" min="1" value="1" />
-                            <input type="hidden" name="orderID" value="@ViewBag.param" />
                             <button type="submit">Add to Cart</button>
                         </form>
                     </td>
@@ -112,8 +113,4 @@
     </tbody>
 </table>
 <div>
-    <form asp-controller="Cart" asp-action="Cart">
-        <input type="hidden" name="orderID" value="@ViewBag.param" />
-        <button type="submit">Back to Cart</button>
-    </form>
-</div>
+    <a asp-controller="Cart" asp-action="Cart">Back to Cart</a>
