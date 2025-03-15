@@ -136,18 +136,6 @@ else
         </tr>
     </tfoot>
 </table>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Total:</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Model.Sum(o => o.SubTotal).ToString("C")</td>
-        </tr>
-    </tbody>
-</table>
 
 <form asp-action="TransferViewPost" method="post">
     <button type="submit" name="orderID" value="@ViewBag.param">Return to Menu</button>
