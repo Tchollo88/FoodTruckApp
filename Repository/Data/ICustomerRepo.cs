@@ -9,6 +9,7 @@ namespace Repository.Data
         Task<Item> GetItemByIdAsync(int id);
         Task AddOrderAsync(Order item);
         Task<bool> SubtractItemAsync(int orderId);
+        Task UpdateItemAsync(Order amount);
         Task DeleteItemAsync(int id);
         Task CheckoutAsync(List<Order> order);
         Task<Order> GetOrderByIdAsync(int id);
