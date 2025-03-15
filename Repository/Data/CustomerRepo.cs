@@ -17,9 +17,15 @@ namespace Repository.Data
         {
             return await _context.Items.ToListAsync();
         }
+
         public async Task<Item> GetItemByIdAsync(int id)
         {
             return await _context.Items.FindAsync(id);
+        }
+
+        public async Task<Order> GetOrderByIdAsync(int id)
+        {
+            return await _context.Orders.FindAsync(id);
         }
 
         public async Task AddItemAsync(Order amount)
@@ -67,8 +73,6 @@ namespace Repository.Data
                 await _context.SaveChangesAsync();
             }
         }
-
-
         public Task CheckoutAsync(List<Order> order)
         {
             throw new NotImplementedException();

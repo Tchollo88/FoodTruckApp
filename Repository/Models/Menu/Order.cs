@@ -17,7 +17,8 @@ namespace Repository.Models.Menu
         public decimal SubTotal
         {
             get 
-            { 
+            {
+                if (LineItems == null || LineItems.Count == 0) return 0;
                 return LineItems.Sum(li => li.Quantity * (li.Item?.Price ?? 0)); 
             }
         }

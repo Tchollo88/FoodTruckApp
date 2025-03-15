@@ -91,6 +91,14 @@
                         @Html.DisplayFor(modelItem => item.Category)
                     </td>
                     <td>
+						@if (item.DiscountPercentage == 0)
+						{
+							<span>No discount</span>
+						}
+						else
+						{
+							<span>@item.DiscountPercentage %</span>
+						})
                         @Html.DisplayFor(modelItem => item.DiscountPercentage)%
                     </td>
                     <td>

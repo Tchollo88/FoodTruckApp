@@ -27,51 +27,86 @@ namespace FoodTruckCustomer.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Cart()
+        public async Task<IActionResult> Cart(Order order)
         {
-            var orders = await _context.Orders
-                .Include(o => o.LineItems)
-                .ThenInclude(li => li.Item)
-                .ToListAsync();
 
-            ViewBag.Items = await _context.Items.ToListAsync();
 
-            return View(orders);
+
+            return View(order);
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
 
         [HttpPost]
-        public async Task<IActionResult> Create(int itemId, int qty)
+        public async Task<IActionResult> Create(int itemId, int qty, int newOrder)
         {
+            // Retrieve order, create if null
+            Order order = await _CustomerRepo.GetOrderByIdAsync(newOrder);
+            if (order == null)
+            {
+                order = new Order { LineItems = new List<lineItem>() }; // Initialize new order with empty LineItems list
+                await _CustomerRepo.AddItemAsync(order); // Save new order to the database
+            }
+
+            // Ensure LineItems is not null
+            if (order.LineItems == null)
+            {
+                order.LineItems = new List<lineItem>();
+            }
+
+            // Validate item existence
+            var item = await _CustomerRepo.GetItemByIdAsync(itemId);
+            if (item == null)
+            {
+                return NotFound("Item not found.");
+            }
+
+            // Ensure quantity is valid
             if (qty <= 0)
             {
                 return BadRequest("Quantity must be greater than zero.");
             }
 
-            var item = await _context.Items.FindAsync(itemId);
-            var newOrder = new Order
-            {
-                LineItems = new List<lineItem>()
-            };
-
+            // Create a new line item
             var newLineItem = new lineItem
             {
                 Item_ID = itemId,
                 Quantity = qty,
                 Item = item,
-                Order = newOrder
+                Order_ID = order.Order_ID, // Associate with order
+                Order = order
             };
 
-            newOrder.LineItems.Add(newLineItem);
-            _context.Orders.Add(newOrder);
-            await _context.SaveChangesAsync();
+            // Add line item to order
+            order.LineItems.Add(newLineItem);
 
-            return RedirectToAction("Items", "Customer");
+            // Update order in the database
+            await _CustomerRepo.UpdateItemAsync(order);
+
+            return RedirectToAction("Cart", "Cart", new { order = order.Order_ID });
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> Create(int itemId, int qty)
+        //{
+        //    Item item = await _CustomerRepo.GetItemByIdAsync(itemId);
+        //    lineItem newLineItem = new lineItem
+        //    {
+        //        Item_ID = itemId,
+        //        Item = item,
+        //        Quantity = qty
+        //    };
+
+        //    if (qty <= 0)
+        //    {
+        //        return BadRequest("Quantity must be greater than zero.");
+        //    }
+
+        //    return RedirectToAction("Cart", "Cart", new { orderId = newOrder });
+        //}
 
         public IActionResult TransferView()
         {
@@ -119,6 +154,9 @@ namespace FoodTruckCustomer.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Cart", "Cart");
         }
+
+
+
 
         // GET: Cart/Delete/5
         public async Task<IActionResult> Delete(int? lineItemId)
