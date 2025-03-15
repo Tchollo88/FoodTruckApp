@@ -91,6 +91,12 @@ namespace Repository.Data
                 FirstOrDefaultAsync();
         }
 
+        public async Task AddReceiptAsync(Receipt receipt)
+        {
+            _context.Receipts.Add(receipt);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteLineItemAsync(int id)
         {
             var lineItem = await _context.lineItems.FindAsync(id);
