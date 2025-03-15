@@ -54,9 +54,8 @@
             <td colspan="2"><strong>Total:</strong></td>
             <td><strong>@Model.LineItems.Sum(o => o.Item.Price*o.Quantity).ToString("C")</strong></td>
             <td>
-                <!-- Checkout Form -->
-                <form asp-action="Checkout" asp-controller="Receipts" method="post">
-                    @* <input type="hidden" name="orderID" value="@order.Order_ID" /> *@
+                <form asp-action="CheckoutConfirmed" asp-controller="Receipts" method="post">
+                    <input type="hidden" name="orderID" value="@ViewBag.param" />
                     <button type="submit" class="btn btn-primary">Checkout</button>
                 </form>
             </td>

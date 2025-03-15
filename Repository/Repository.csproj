@@ -22,8 +22,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\Menu\Images\" />
 	  <Folder Include="Migrations\" />
+	  <Folder Include="Models\Menu\Images\" />
 	</ItemGroup>
 
 </Project>
