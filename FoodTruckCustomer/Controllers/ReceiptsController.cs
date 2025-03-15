@@ -19,23 +19,11 @@ namespace FoodTruckCustomer.Controllers
             _CustomerRepo = context;
         }
 
-        // GET: Receipts
         public async Task<IActionResult> Index()
         {
 
             return View();
         }
-
-        //public async Task<IActionResult> Receipt(int receiptId)
-        //{
-        //    var receipt = await _context.Receipts
-        //        .Include(r => r.Order)
-        //            .ThenInclude(o => o.LineItems)
-        //                .ThenInclude(li => li.Item)
-        //        .FirstOrDefaultAsync(r => r.Receipt_ID == receiptId);
-
-        //    return View(receipt);
-        //}
 
         public async Task<IActionResult> Checkout(int orderID)
         {
