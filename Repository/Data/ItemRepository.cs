@@ -58,6 +58,9 @@ namespace Repository.Data
         {
             return await _context.Receipts.
                 Where(r => r.Date >= start && r.Date <= end).
+                Include(o => o.Order).
+                ThenInclude(li => li.LineItems).
+                ThenInclude(i => i.Item).
                 ToListAsync();
         }
 

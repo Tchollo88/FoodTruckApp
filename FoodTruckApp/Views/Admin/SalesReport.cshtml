@@ -4,7 +4,15 @@
     ViewData["Title"] = "SalesReport";
 }
 
-<h1>Sales Report</h1>
+<h1>Sales Report for : @ViewBag.Start - @ViewBag.End</h1>
+
+<form asp-action="SalesReport" asp-controller="Admin">
+    <label>From</label>
+    <input type="date" name="start" />
+    <label>to</label>
+    <input type="date" name="end" />
+    <input type="submit" value="Submit" />
+</form>
 
 <table class="table">
     <thead>
@@ -15,6 +23,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.Order.Order_ID).Split('_')[0]
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.LineItems).Insert(4, " ")
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
@@ -31,6 +41,28 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Order_ID)
+            </td>
+            <td>
+                @foreach (var LineItem in item.Order.LineItems)
+                {
+                    <ul>
+                        <li>
+                            @Html.DisplayNameFor(modelItem => LineItem.Item.Name)
+                            -
+                            @Html.DisplayFor(modelItem => LineItem.Item.Name)
+                        </li>
+                        <li>
+                            @Html.DisplayNameFor(modelItem => LineItem.Item.Price)
+                            -
+                            @Html.DisplayFor(modelItem => LineItem.Item.Price)
+                        </li>
+                        <li>
+                            @Html.DisplayNameFor(modelItem => LineItem.Quantity)
+                            -
+                            @Html.DisplayFor(modelItem => LineItem.Quantity)
+                        </li>
+                    </ul>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)

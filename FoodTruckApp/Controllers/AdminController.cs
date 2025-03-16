@@ -172,17 +172,19 @@ namespace FoodTruckApp.Controllers
             return View(names);
         }
 
-        public async Task<IActionResult> SalesReport(DateTime start = default, DateTime stop = default)
+        public async Task<IActionResult> SalesReport(DateTime start = default, DateTime end = default)
         {
             if (start == default)
             {
                 start = DateTime.Today.AddDays(-60);
             }
-            if (stop == default)
+            if (end == default)
             {
-                stop = DateTime.Today.AddDays(1);
+                end = DateTime.Today.AddDays(1);
             }
-            var receipts = await _ItemRepository.GetAllReceiptsAsync(start, stop);
+            ViewBag.Start = start.ToShortDateString();
+            ViewBag.End = end.ToShortDateString();
+            var receipts = await _ItemRepository.GetAllReceiptsAsync(start, end);
             return View(receipts);
         }
     }
