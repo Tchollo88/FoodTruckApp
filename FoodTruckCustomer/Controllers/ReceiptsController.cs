@@ -38,7 +38,8 @@ namespace FoodTruckCustomer.Controllers
             {
                 Order_ID = orderID,
                 Order = order,
-                Date = DateTime.UtcNow
+                Date = DateTime.UtcNow,
+                TotalPrice = order.SubTotal
             };
 
             receipt.Receipt_ID = receiptID;
@@ -60,7 +61,8 @@ namespace FoodTruckCustomer.Controllers
             {
                 Order_ID = orderID,
                 Order = order,
-                Date = DateTime.UtcNow
+                Date = DateTime.UtcNow,
+                TotalPrice = order.SubTotal
             };
 
             await _CustomerRepo.AddReceiptAsync(receipt);

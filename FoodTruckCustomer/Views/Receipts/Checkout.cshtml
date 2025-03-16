@@ -48,11 +48,27 @@
                 <tr>
                     <td>@item.Item.Name</td>
                     <td>@item.Quantity</td>
-                    <td>@item.Item.Price.ToString("C")</td>
+                    <td>
+                        @if (item.Item.OnSale)
+                        {
+                            <span>@((item.Item.Price * (100-item.Item.DiscountPercentage)/100).ToString("C"))</span>
+                        }
+                        else
+                        {
+                            @item.Item.Price.ToString("C")
+                        }
+                    </td>
                     <td>
                         <bold>
-                            <span>$</span>
-                            @(item.Quantity * item.Item.Price)
+                            <span></span>
+                            @if (item.Item.OnSale)
+                            {
+                                <span>@((item.Quantity * item.Item.Price * (100-item.Item.DiscountPercentage)/100).ToString("C"))</span>
+                            }
+                            else
+                            {
+                                <span>@((item.Quantity * item.Item.Price).ToString("C"))</span>
+                            }
                         </bold>
                     </td>
                 </tr>
@@ -63,7 +79,7 @@
     <h3>
         <strong>
             <bold>
-                Total Price: @Model.TotalPrice.ToString("C")
+                Total Price: @Model.Order.SubTotal.ToString("C")
             </bold>
         </strong>
     </h3>

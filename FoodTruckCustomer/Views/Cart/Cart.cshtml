@@ -19,6 +19,7 @@
             <th>Order Number: @Model.Order_ID</th>
             <th>Items</th>
             <th>Subtotal ($)</th>
+            <th>Discounts</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -31,9 +32,24 @@
                 @lineItem.Item.Name - Quantity: @lineItem.Quantity
             </td>
             <td>
-                @(lineItem.Item.Price * lineItem.Quantity)
+                @if (lineItem.Item.OnSale)
+                {
+                    @((lineItem.Item.Price * lineItem.Quantity * (100-lineItem.Item.DiscountPercentage)/100).ToString("C"))
+                }
+                else
+                {
+                    @((lineItem.Item.Price * lineItem.Quantity).ToString("C"))
+                }
             </td>
-                <td>
+            <td>
+                @if (lineItem.Item.OnSale)
+                {
+                    <span>
+                        @lineItem.Item.DiscountPercentage% off
+                    </span>
+                }
+            </td>
+            <td>
                 <form asp-action="AdjustCount" asp-controller="Cart" method="post">
                     <input type="hidden" name="lineItemId" value="@lineItem.lineItem_ID" />
                     <input type="hidden" name="orderID" value="@ViewBag.param" />
@@ -52,7 +68,12 @@
     <tfoot>
         <tr>
             <td colspan="2"><strong>Total:</strong></td>
-            <td><strong>@Model.LineItems.Sum(o => o.Item.Price*o.Quantity).ToString("C")</strong></td>
+            <td>
+                <strong>
+                    @Model.SubTotal.ToString("C")
+                </strong>
+            </td>
+            <td></td>
             <td>
                 <form asp-action="CheckoutConfirmed" asp-controller="Receipts" method="post">
                     <input type="hidden" name="orderID" value="@ViewBag.param" />
