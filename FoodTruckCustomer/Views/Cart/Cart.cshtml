@@ -1,58 +1,95 @@
-﻿@model Repository.Models.Menu.Order
-@{
+﻿@using Repository.Models.Menu;
+@using FoodTruckCustomer.Controllers;
+
+﻿@{
     Layout = "_Layout";
 }
 
-<h1>Your Cart</h1>
+@model Repository.Models.Menu.Order
 
-@if (Model?.LineItems.Count == 0)
-{
-    <p>Your cart is empty. <a href="@Url.Action("Items", "Customer")">Add some items!</a></p>
+@{
+    ViewData["Title"] = "Cart";
 }
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var lineItem in Model.LineItems)
-            {
-                <tr>
-                    <td>@lineItem.Item.Name</td>
-                    <td>@lineItem.Item.Price.ToString("C")</td>
-                    <td>
-                        <form asp-action="AdjustQuantity" asp-controller="Cart" method="post">
-                            <input type="hidden" name="lineItemId" value="@lineItem.lineItem_ID" />
-                            <button type="submit" name="qty" value="1" class="btn btn-primary"> [+] </button>
-                            <button type="submit" name="qty" value="-1" class="btn btn-primary"> [-] </button>
-                        </form>
-                    </td>
-                    <td>@(lineItem.Quantity * lineItem.Item.Price).ToString("C")</td>
-                    <td>
-                        <form asp-action="Delete" asp-controller="Cart" method="post">
-                            <input type="hidden" name="lineItemId" value="@lineItem.lineItem_ID" />
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3"><strong>Total:</strong></td>
-                <td><strong>@Model.SubTotal.ToString("C")</strong></td>
-                <td>
-                    <a asp-action="Checkout" asp-controller="Receipts" asp-route-orderId="@Model.Order_ID" class="btn btn-success">Proceed to Checkout</a>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
-}
+
+<h2>Shopping Cart</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Order Number: @Model.Order_ID</th>
+            <th>Items</th>
+            <th>Subtotal ($)</th>
+            <th>Discounts</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lineItem in Model.LineItems)
+        {
+        <tr>
+            <td></td>
+            <td>
+                @lineItem.Item.Name - Quantity: @lineItem.Quantity
+            </td>
+            <td>
+                @if (lineItem.Item.OnSale)
+                {
+                    @((lineItem.Item.Price * lineItem.Quantity * (100-lineItem.Item.DiscountPercentage)/100).ToString("C"))
+                }
+                else
+                {
+                    @((lineItem.Item.Price * lineItem.Quantity).ToString("C"))
+                }
+            </td>
+            <td>
+                @if (lineItem.Item.OnSale)
+                {
+                    <span>
+                        @lineItem.Item.DiscountPercentage% off
+                    </span>
+                }
+            </td>
+            <td>
+                <form asp-action="AdjustCount" asp-controller="Cart" method="post">
+                    <input type="hidden" name="lineItemId" value="@lineItem.lineItem_ID" />
+                    <input type="hidden" name="orderID" value="@ViewBag.param" />
+                    <input type="hidden" name="cart" value="@ViewBag.cart" />
+                    <button type="submit" name="qty" value="1" class="btn btn-primary"> [+] </button>
+                    <button type="submit" name="qty" value="-1" class="btn btn-primary"> [-] </button>
+                </form>
+                <form asp-action="Delete" asp-controller="Cart" method="post">
+                    <input type="hidden" name="lineItemId" value="@lineItem.lineItem_ID" />
+                        <input type="hidden" name="orderID" value="@ViewBag.param" />
+                        <input type="hidden" name="cart" value="@ViewBag.cart" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2"><strong>Total:</strong></td>
+            <td>
+                <strong>
+                    @Model.SubTotal.ToString("C")
+                </strong>
+            </td>
+            <td></td>
+            <td>
+                <form asp-action="CheckoutConfirmed" asp-controller="Receipts" method="post">
+                    <input type="hidden" name="orderID" value="@ViewBag.param" />
+                    <input type="hidden" name="cart" value="@ViewBag.cart" />
+                    <button type="submit" class="btn btn-primary">Checkout</button>
+                </form>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<form asp-action="TransferViewPost" method="post">
+    <input type="hidden" name="orderID" value="@ViewBag.param" />
+    <input type="hidden" name="cart" value="@ViewBag.cart" />
+    <button type="submit" class="btn btn-primary">Return to Menu</button>
+</form>
 
