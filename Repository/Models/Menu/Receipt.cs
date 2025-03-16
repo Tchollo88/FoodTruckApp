@@ -15,13 +15,7 @@ namespace Repository.Models.Menu
         public virtual Order? Order { get; set; }
 
         [Required, Column(TypeName = "decimal(10,2)")]
-        public decimal TotalPrice
-        {
-            get
-            {
-                return Order?.SubTotal ?? 0;
-            }
-        }
+        public decimal TotalPrice { get; set; }
 
         [Required]
         public DateTime Date { get; set; } = DateTime.UtcNow;

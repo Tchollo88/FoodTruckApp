@@ -19,8 +19,8 @@ namespace Repository.Models.Menu
             get 
             { 
                 if (LineItems == null) return 0;
-                var totalNoSale = LineItems.Where(li => !li.Item.OnSale).Sum(li => li.Quantity * (li.Item?.Price ?? 0));
-                var totalSale = LineItems.Where(li => li.Item.OnSale).Sum(li => li.Quantity * (li.Item?.Price ?? 0));
+                var totalNoSale = LineItems.Where(li => li.Item.OnSale == false).Sum(li => li.Quantity * (li.Item?.Price ?? 0));
+                var totalSale = LineItems.Where(li => li.Item.OnSale).Sum(li => li.Quantity * ((li.Item?.Price ?? 0) * (100 - li.Item.DiscountPercentage)/100));
                 return (totalNoSale + totalSale); 
             }
         }
