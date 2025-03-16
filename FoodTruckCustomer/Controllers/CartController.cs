@@ -110,6 +110,7 @@ namespace FoodTruckCustomer.Controllers
             var lineItem = await _CustomerRepo.GetLineItemByIdAsync(lineItemId);
 
             lineItem.Quantity += qty;
+            ViewBag.cart = cart += qty;
 
             if (lineItem.Quantity <= 0)
             {
@@ -140,8 +141,14 @@ namespace FoodTruckCustomer.Controllers
         public async Task<IActionResult> DeleteConfirmed(int lineItemId, int orderID, int cart)
         {
             ViewBag.param = orderID;
-            ViewBag.cart = cart;
+            cart = 0;
             await _CustomerRepo.DeleteLineItemAsync(lineItemId);
+            var order = await _CustomerRepo.GetOrderByIdAsync(orderID);
+            foreach (var count in order.LineItems)
+            {
+                cart += count.Quantity;
+            };
+            ViewBag.cart = cart;
             return RedirectToAction("Cart", "Cart", new { orderID = orderID, cart = cart});
         }
 
