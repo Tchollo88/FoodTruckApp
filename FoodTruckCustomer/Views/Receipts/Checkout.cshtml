@@ -6,7 +6,7 @@
 }
 
 <h2><strong>Receipt</strong></h2>
-<p><strong>Order ID:</strong> @Model.Receipt_ID</p>
+<p><strong>Receipt Number:</strong> @Model.Receipt_ID</p>
 <p><strong>Order ID:</strong> @Model.Order_ID</p> 
 <p><strong>Date:</strong> @Model.Date.ToString("f")</p>
 
@@ -70,7 +70,11 @@
 }
 else
 {
-    <p>No order details available.</p>
+    <p>
+        <strong>
+            <bold>No order details available.</bold>
+        </strong>
+    </p>
 }
 
 <form asp-action="Index" asp-controller="Home">
