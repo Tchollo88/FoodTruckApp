@@ -37,11 +37,6 @@ namespace FoodTruckCustomer.Controllers
             return View(order);
         }
 
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
         [HttpPost]
         public async Task<IActionResult> Create(int itemId, int qty, int orderID)
         {
@@ -96,25 +91,6 @@ namespace FoodTruckCustomer.Controllers
             return RedirectToAction("Items", "Customer", new { orderID = orderID, cart = cart });
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create(int itemId, int qty)
-        //{
-        //    Item item = await _CustomerRepo.GetItemByIdAsync(itemId);
-        //    lineItem newLineItem = new lineItem
-        //    {
-        //        Item_ID = itemId,
-        //        Item = item,
-        //        Quantity = qty
-        //    };
-
-        //    if (qty <= 0)
-        //    {
-        //        return BadRequest("Quantity must be greater than zero.");
-        //    }
-
-        //    return RedirectToAction("Cart", "Cart", new { orderId = newOrder });
-        //}
-
         public IActionResult TransferView()
         {
             return View();
@@ -146,9 +122,6 @@ namespace FoodTruckCustomer.Controllers
             }
             return RedirectToAction("Cart", "Cart", new { orderID = orderID, cart = cart});
         }
-
-
-
 
         // GET: Cart/Delete/5
         public async Task<IActionResult> Delete(int lineItemId, int orderID, int cart)
@@ -208,7 +181,6 @@ namespace FoodTruckCustomer.Controllers
     }
 }
 
-//this is a working copy
 
 
 
