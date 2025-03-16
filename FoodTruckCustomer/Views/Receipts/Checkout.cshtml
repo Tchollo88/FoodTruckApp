@@ -5,10 +5,9 @@
     ViewData["Title"] = "Checkout";
 }
 
-<h2>Receipt</h2>
-
-<p><strong>Receipt ID:</strong> @Model.Receipt_ID</p>
-@* <p><strong>Order ID:</strong> @Model.Order_ID</p> *@
+<h2><strong>Receipt</strong></h2>
+<p><strong>Order ID:</strong> @Model.Receipt_ID</p>
+<p><strong>Order ID:</strong> @Model.Order_ID</p> 
 <p><strong>Date:</strong> @Model.Date.ToString("f")</p>
 
 @if (Model.Order != null && Model.Order.LineItems.Any())
