@@ -55,8 +55,11 @@
                 }
             </div>
             <div class="form-group">
-                <label class="control-label">Upload New Image</label>
-                <input type="file" name="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif" />
+                <label asp-for="Image" class="control-label">
+                    Upload New Image
+                </label>
+                <input asp-for="Image" type="file" name="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
