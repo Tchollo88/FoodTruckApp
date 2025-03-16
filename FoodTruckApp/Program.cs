@@ -24,6 +24,9 @@ builder.Services.AddTransient<ApplicationDbSeeder>(); // Register the seeder as 
 
 var app = builder.Build();
 
+// Enables serving static files (needed for images)
+app.UseStaticFiles();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -34,18 +37,13 @@ else
 }
 
 app.UseRouting();
-
 app.UseAuthorization();
-
-app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapRazorPages();
 
 // Migrate database, create roles, and seed data
 using (var scope = app.Services.CreateScope())
