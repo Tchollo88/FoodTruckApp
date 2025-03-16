@@ -25,7 +25,7 @@ namespace FoodTruckCustomer.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Checkout(int orderID)
+        public async Task<IActionResult> Checkout(int orderID, int receiptID)
         {
             ViewBag.param = orderID;
             var order = await _CustomerRepo.GetOrderByIdAsync(orderID);
@@ -40,6 +40,8 @@ namespace FoodTruckCustomer.Controllers
                 Order = order,
                 Date = DateTime.UtcNow
             };
+
+            receipt.Receipt_ID = receiptID;
 
             return View(receipt);
         }
@@ -61,9 +63,11 @@ namespace FoodTruckCustomer.Controllers
                 Date = DateTime.UtcNow
             };
 
-            return RedirectToAction("Checkout", "Receipts", new { orderID = orderID });
-        }
+            await _CustomerRepo.AddReceiptAsync(receipt);
 
+            return RedirectToAction("Checkout", "Receipts", new { orderID = orderID, receiptID = receipt.Receipt_ID });
+
+        }
     }
 
 }
