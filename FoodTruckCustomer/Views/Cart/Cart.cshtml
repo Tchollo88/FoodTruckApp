@@ -126,12 +126,14 @@ else
                 <form asp-action="AdjustCount" asp-controller="Cart" method="post">
                     <input type="hidden" name="lineItemId" value="@lineItem.lineItem_ID" />
                     <input type="hidden" name="orderID" value="@ViewBag.param" />
+                    <input type="hidden" name="cart" value="@ViewBag.cart" />
                     <button type="submit" name="qty" value="1" class="btn btn-primary"> [+] </button>
                     <button type="submit" name="qty" value="-1" class="btn btn-primary"> [-] </button>
                 </form>
                 <form asp-action="Delete" asp-controller="Cart" method="post">
                     <input type="hidden" name="lineItemId" value="@lineItem.lineItem_ID" />
-                    <input type="hidden" name="orderID" value="@ViewBag.param" />
+                        <input type="hidden" name="orderID" value="@ViewBag.param" />
+                        <input type="hidden" name="cart" value="@ViewBag.cart" />
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </td>
@@ -150,6 +152,7 @@ else
             <td>
                 <form asp-action="CheckoutConfirmed" asp-controller="Receipts" method="post">
                     <input type="hidden" name="orderID" value="@ViewBag.param" />
+                    <input type="hidden" name="cart" value="@ViewBag.cart" />
                     <button type="submit" class="btn btn-primary">Checkout</button>
                 </form>
             </td>
@@ -170,6 +173,8 @@ else
 </table>
 
 <form asp-action="TransferViewPost" method="post">
-    <button type="submit" name="orderID" value="@ViewBag.param">Return to Menu</button>
+    <input type="hidden" name="orderID" value="@ViewBag.param" />
+    <input type="hidden" name="cart" value="@ViewBag.cart" />
+    <button type="submit" class="btn btn-primary">Return to Menu</button>
 </form>
 

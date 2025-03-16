@@ -22,9 +22,6 @@
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
@@ -41,16 +38,17 @@
                 <form asp-action="NameSearch" method="get" class="form-control">
                     <input type="search" name="Name" placeholder="Search by Name" />
                     <input type="hidden" name="orderID" value="@ViewBag.param" />
+                    <input type="hidden" name="cart" value="@ViewBag.cart" />
                     <input type="submit" value="Search" class="btn btn-primary" />
                 </form>
             </div>
         </td>
         <td></td> <!-- Empty cell for Price -->
-        <td></td> <!-- Empty cell for Description -->
         <td>
             <div class="col-md-6">
                 <form asp-action="Category" method="get" class="form-control">
                     <input type="hidden" name="orderID" value="@ViewBag.param" />
+                    <input type="hidden" name="cart" value="@ViewBag.cart" />
                     @Html.DropDownList("Category", new SelectList(Model.Select(c => c.Category).Distinct()), "All")
                     <input type="submit" value="Filter" class="btn btn-primary" />
                 </form>
@@ -81,13 +79,16 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a asp-controller="Customer"
+                        asp-action="Details"
+                        asp-route-itemID="@item.Item_ID"
+                        asp-route-orderID="@ViewBag.param"
+                        asp-route-cart="@ViewBag.cart">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Category)
@@ -104,7 +105,8 @@
                     <form asp-controller="Cart" asp-action="Create" method="post">
                         <input type="hidden" name="itemId" value="@item.Item_ID" />
                         <input type="number" name="Qty" min="1" value="1" />
-                        <input type="hidden" name="orderID" value="@ViewBag.param" />
+                            <input type="hidden" name="orderID" value="@ViewBag.param" />
+                            <input type="hidden" name="cart" value="@ViewBag.cart" />
                         <button type="submit">Add to Cart</button>
                     </form>
                 </td>
@@ -116,6 +118,7 @@
 <div>
     <form asp-controller="Customer" asp-action="Items" method="get">
         <input type="hidden" name="orderID" value="@ViewBag.param" />
+        <input type="hidden" name="cart" value="@ViewBag.cart" />
         <button type="submit">Back to List</button>
     </form>
 </div>

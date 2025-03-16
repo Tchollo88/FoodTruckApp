@@ -25,9 +25,10 @@ namespace FoodTruckCustomer.Controllers
             return View();
         }
         
-        public async Task<IActionResult> Cart(int orderID)
+        public async Task<IActionResult> Cart(int orderID, int cart)
         {
             ViewBag.param = orderID;
+            ViewBag.cart = cart;
             var order = await _CustomerRepo.GetOrderByIdAsync(orderID);
             if (order == null)
             {
@@ -88,7 +89,12 @@ namespace FoodTruckCustomer.Controllers
                     await _CustomerRepo.UpdateOrderAsync(order);
                 }
             }
-            return RedirectToAction("Items", "Customer", new { orderID = orderID });
+            int cart = 0;
+            foreach (var count in order.LineItems) 
+            {
+                cart += count.Quantity;
+            };
+            return RedirectToAction("Items", "Customer", new { orderID = orderID, cart = cart });
         }
 
         //[HttpPost]
@@ -116,23 +122,16 @@ namespace FoodTruckCustomer.Controllers
         }
 
         [HttpPost]
-        public IActionResult TransferViewPost(int orderID)
+        public IActionResult TransferViewPost(int orderID, int cart)
         {
-            return RedirectToAction("Items", "Customer", new { orderID = orderID });
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> AdjustCount(int lineItemId)
-        {
-             var lineItem = _CustomerRepo.GetLineItemByIdAsync(lineItemId);
-
-            return View(lineItem);
+            return RedirectToAction("Items", "Customer", new { orderID = orderID, cart = cart });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdjustCountAsync(int lineItemId, int qty, int orderID)
+        public async Task<IActionResult> AdjustCountAsync(int lineItemId, int qty, int orderID, int cart)
         {
             ViewBag.param = orderID;
+            ViewBag.cart = cart;
             var lineItem = await _CustomerRepo.GetLineItemByIdAsync(lineItemId);
 
             lineItem.Quantity += qty;
@@ -145,15 +144,17 @@ namespace FoodTruckCustomer.Controllers
             {
                 await _CustomerRepo.UpdateLineItemAsync(lineItem);
             }
-            return RedirectToAction("Cart", "Cart", new { orderID = orderID});
+            return RedirectToAction("Cart", "Cart", new { orderID = orderID, cart = cart});
         }
 
 
 
 
         // GET: Cart/Delete/5
-        public async Task<IActionResult> Delete(int lineItemId)
+        public async Task<IActionResult> Delete(int lineItemId, int orderID, int cart)
         {
+            ViewBag.param = orderID;
+            ViewBag.cart = cart;
             var lineItem = _CustomerRepo.GetLineItemByIdAsync(lineItemId);
             if (lineItem == null)
             {
@@ -164,10 +165,12 @@ namespace FoodTruckCustomer.Controllers
 
         // POST: Cart/Delete/5
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int lineItemId, int orderID)
+        public async Task<IActionResult> DeleteConfirmed(int lineItemId, int orderID, int cart)
         {
+            ViewBag.param = orderID;
+            ViewBag.cart = cart;
             await _CustomerRepo.DeleteLineItemAsync(lineItemId);
-            return RedirectToAction("Cart", "Cart", new { orderID = orderID});
+            return RedirectToAction("Cart", "Cart", new { orderID = orderID, cart = cart});
         }
 
         public async Task<IActionResult> Checkout(int id)

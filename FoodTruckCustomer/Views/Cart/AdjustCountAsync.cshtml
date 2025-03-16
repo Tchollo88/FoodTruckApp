@@ -31,12 +31,16 @@
 
                                 <form asp-action="AdjustCountAsync" asp-controller="Cart" method="post" style="display:inline;">
                                     <input type="hidden" name="lineItemId" value="@item.lineItem_ID" />
+                                    <input type="hidden" name="orderID" value="@ViewBag.param" />
+                                    <input type="hidden" name="cart" value="@ViewBag.cart" />
                                     <input type="hidden" name="qtyChange" value="1" />
                                     <button type="submit">[ + ]</button>
                                 </form>
 
                                 <form asp-action="AdjustCountAsync" asp-controller="Cart" method="post" style="display:inline;">
                                     <input type="hidden" name="lineItemId" value="@item.lineItem_ID" />
+                                    <input type="hidden" name="orderID" value="@ViewBag.param" />
+                                    <input type="hidden" name="cart" value="@ViewBag.cart" />
                                     <input type="hidden" name="qtyChange" value="-1" />
                                     <button type="submit">[ - ]</button>
                                 </form>
