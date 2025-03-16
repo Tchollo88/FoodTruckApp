@@ -48,8 +48,7 @@ namespace FoodTruckCustomer.Controllers
             var item = await _CustomerRepo.GetItemByIdAsync(itemId);
             if (qty <= 0)
             {
-                order = new Order { LineItems = new List<lineItem>() }; // Initialize new order with empty LineItems list
-                await _CustomerRepo.AddItemAsync(order); // Save new order to the database
+                return BadRequest("Quantity must be greater than zero.");
             }
             var order = await _CustomerRepo.GetOrderByIdAsync(orderID);
             if (order.LineItems.Count == 0)
