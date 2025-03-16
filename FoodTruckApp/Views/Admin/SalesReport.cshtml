@@ -1,43 +1,76 @@
 ﻿@model IEnumerable<Repository.Models.Menu.Receipt>
 
 @{
-    ViewData["Title"] = "Sales Report";
+    ViewData["Title"] = "SalesReport";
 }
 
-<h1>Sales Report</h1>
+<h1>Sales Report for : @ViewBag.Start - @ViewBag.End</h1>
+
+<form asp-action="SalesReport" asp-controller="Admin">
+    <label>From</label>
+    <input type="date" name="start" />
+    <label>to</label>
+    <input type="date" name="end" />
+    <input type="submit" value="Submit" />
+</form>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Receipt_ID).Split('_').First()
+                @Html.DisplayNameFor(model => model.Receipt_ID).Split('_')[0]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalPrice).Insert(5, " ")
+                @Html.DisplayNameFor(model => model.Order.Order_ID).Split('_')[0]
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.LineItems).Insert(4, " ")
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
-            <th></th>
+            <th>
+                Sale
+            </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) 
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Receipt_ID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TotalPrice)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @* <a asp-action="Details" asp-route-id="@item.Receipt_ID">Details</a> *@
-                    </td>
-                </tr>
-            }
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Receipt_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order_ID)
+            </td>
+            <td>
+                @foreach (var LineItem in item.Order.LineItems)
+                {
+                    <ul>
+                        <li>
+                            @Html.DisplayNameFor(modelItem => LineItem.Item.Name)
+                            -
+                            @Html.DisplayFor(modelItem => LineItem.Item.Name)
+                        </li>
+                        <li>
+                            @Html.DisplayNameFor(modelItem => LineItem.Item.Price)
+                            -
+                            @Html.DisplayFor(modelItem => LineItem.Item.Price)
+                        </li>
+                        <li>
+                            @Html.DisplayNameFor(modelItem => LineItem.Quantity)
+                            -
+                            @Html.DisplayFor(modelItem => LineItem.Quantity)
+                        </li>
+                    </ul>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                $@Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+        </tr>
+}
     </tbody>
 </table>

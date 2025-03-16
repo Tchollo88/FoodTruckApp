@@ -10,5 +10,7 @@ namespace Repository.Data
         Task UpdateItemAsync(Item item);
         Task DeleteItemAsync(int id);
         Task<IEnumerable<Receipt>> GetAllReceiptsAsync();
+        Task<Receipt> GetReceiptByIdAsync(int id);
+        Task<IEnumerable<Receipt>> GetAllReceiptsAsync(DateTime start, DateTime end);
     }
 }
