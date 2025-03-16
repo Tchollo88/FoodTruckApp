@@ -16,17 +16,18 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Image</th>
             <th>@Html.DisplayNameFor(model => model.Name)</th>
             <th>@Html.DisplayNameFor(model => model.Price)</th>
             <th>@Html.DisplayNameFor(model => model.Description)</th>
             <th>@Html.DisplayNameFor(model => model.Category)</th>
             <th>@Html.DisplayNameFor(model => model.OnSale)</th>
             <th>Actions</th>
-            <th>Image</th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <td></td> <!-- Empty cell for Image -->
             <td>
                 <div class="col-md-6">
                     <form asp-action="NameSearch" method="get" class="form-control">
@@ -52,6 +53,16 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Image))
+                    {
+                        <img src="~/menu/images/@item.Image" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <span>No image</span>
+                    }
+                </td>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>
                     @if (item.OnSale)
@@ -63,7 +74,6 @@
                         @item.Price.ToString("C")
                     }
                 </td>
-                <td>@Html.DisplayFor(modelItem => item.Description)</td>
                 <td>@Html.DisplayFor(modelItem => item.Category)</td>
                 <td>@Html.DisplayFor(modelItem => item.OnSale)</td>
                 <td>
@@ -71,18 +81,6 @@
                     <a asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Item_ID">Delete</a>
                 </td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.Image))
-                    {
-                        <img src="/menu/images/@item.Image" alt="@item.Name"
-                             style="width: 50px; height: 50px; object-fit: cover;" />
-                    }
-                    else
-                    {
-                        <span>No image</span>
-                    }
-                </td>
-
             </tr>
         }
     </tbody>
