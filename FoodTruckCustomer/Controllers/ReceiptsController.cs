@@ -61,7 +61,8 @@ namespace FoodTruckCustomer.Controllers
                 Date = DateTime.UtcNow
             };
 
-            return RedirectToAction("Checkout", "Receipts", new { orderID = orderID });
+            await _CustomerRepo.AddReceiptAsync(receipt);
+            return RedirectToAction("Checkout", "Receipts", new { orderID = orderID});
         }
 
     }
