@@ -53,5 +53,22 @@ namespace Repository.Data
         {
             return await _context.Receipts.ToListAsync();
         }
+
+        public async Task<IEnumerable<Receipt>> GetAllReceiptsAsync(DateTime start, DateTime end)
+        {
+            return await _context.Receipts.
+                Where(r => r.Date >= start && r.Date <= end).
+                ToListAsync();
+        }
+
+        public async Task<Receipt> GetReceiptByIdAsync(int id)
+        {
+            return await _context.Receipts.
+                Where(r => r.Receipt_ID == id).
+                Include(o => o.Order).
+                ThenInclude(li => li.LineItems).
+                ThenInclude(i => i.Item).
+                FirstOrDefaultAsync();
+        }
     }
 }
