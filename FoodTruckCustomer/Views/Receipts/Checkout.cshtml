@@ -1,28 +1,45 @@
 ﻿@using Repository.Models.Menu;
-@using FoodTruckCustomer.Controllers;
+@model Repository.Models.Menu.Receipt
 
 @{
     ViewData["Title"] = "Checkout";
 }
 
-@model Repository.Models.Menu.Receipt
-
-<h2>Receipt</h2>
-
-<p><strong>Receipt ID:</strong> @Model.Receipt_ID</p>
-<p><strong>Order ID:</strong> @Model.Order_ID</p>
+<h2><strong>Receipt</strong></h2>
+<p><strong>Receipt Number:</strong> @Model.Receipt_ID</p>
+<p><strong>Order ID:</strong> @Model.Order_ID</p> 
 <p><strong>Date:</strong> @Model.Date.ToString("f")</p>
 
 @if (Model.Order != null && Model.Order.LineItems.Any())
 {
-    <h3>Order Details</h3>
+    <h3>
+        <strong>
+            <bold>Order Details</bold>
+        </strong>
+    </h3>
     <table border="1">
         <thead>
             <tr>
-                <th>Item Name</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Subtotal</th>
+                <th>
+                    <strong>
+                        Item Name
+                    </strong>
+                </th>
+                <th>
+                    <strong>
+                        Quantity
+                    </strong>
+                </th>
+                <th>
+                    <strong>
+                        Unit Price
+                    </strong>
+                </th>
+                <th>
+                    <strong>
+                        Subtotal
+                    </strong>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -31,18 +48,51 @@
                 <tr>
                     <td>@item.Item.Name</td>
                     <td>@item.Quantity</td>
-                    <td>@item.Item.Price.ToString("C")</td>
-                    <td>@(item.Quantity * item.Item.Price).ToString("C")</td>
+                    <td>
+                        @if (item.Item.OnSale)
+                        {
+                            <span>@((item.Item.Price * (100-item.Item.DiscountPercentage)/100).ToString("C"))</span>
+                        }
+                        else
+                        {
+                            @item.Item.Price.ToString("C")
+                        }
+                    </td>
+                    <td>
+                        <bold>
+                            <span></span>
+                            @if (item.Item.OnSale)
+                            {
+                                <span>@((item.Quantity * item.Item.Price * (100-item.Item.DiscountPercentage)/100).ToString("C"))</span>
+                            }
+                            else
+                            {
+                                <span>@((item.Quantity * item.Item.Price).ToString("C"))</span>
+                            }
+                        </bold>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <h3>Total Price: @Model.TotalPrice.ToString("C")</h3>
+    <h3>
+        <strong>
+            <bold>
+                Total Price: @Model.Order.SubTotal.ToString("C")
+            </bold>
+        </strong>
+    </h3>
 }
 else
 {
-    <p>No order details available.</p>
+    <p>
+        <strong>
+            <bold>No order details available.</bold>
+        </strong>
+    </p>
 }
 
-<a asp-action="Index" asp-controller="Home">Return to Home</a>
+<form asp-action="Index" asp-controller="Home">
+    <button type="submit">Return to Home</button>
+</form>

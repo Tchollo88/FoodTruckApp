@@ -14,6 +14,8 @@ namespace Repository.Data
         Task CheckoutAsync(List<Order> order);
         Task<Order> GetOrderByIdAsync(int id);
         Task<lineItem> GetLineItemByIdAsync(int id);
+        Task<Receipt> GetReceiptByIdAsync(int id);
+        Task AddReceiptAsync(Receipt receipt);
         Task DeleteLineItemAsync(int id);
         Task UpdateLineItemAsync(lineItem item);
         Task AddLineItemAsync(lineItem lineItem);

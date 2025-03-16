@@ -28,7 +28,7 @@
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DiscountPercentage).Insert(8, " ")
+                @Html.DisplayNameFor(model => model.DiscountPercentage).Split("P")[0]
             </th>
             <th>
             </th>
@@ -84,7 +84,14 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Price)
+                        @if (item.OnSale)
+                        {
+                            <span>@((item.Price * (100 - item.DiscountPercentage) / 100).ToString("C"))</span>
+                        }
+                        else
+                        {
+                            <span>@((item.Price).ToString("C"))</span>
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)
@@ -95,8 +102,9 @@
                     <td>
                         @if (item.OnSale)
                         {
-                            @Html.DisplayFor(modelItem => item.DiscountPercentage)
-                            <span>% off</span>
+                            <span>
+                                @Html.DisplayFor(modelItem => item.DiscountPercentage)% off
+                            </span>
                         }
                     </td>
                     <td>
