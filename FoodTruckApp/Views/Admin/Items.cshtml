@@ -12,23 +12,17 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>Image</th> <!-- New column for image -->
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OnSale).Insert(2, " ")
-            </th>
-            <th></th> <!-- Actions column -->
+            <th>Image</th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Price)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>@Html.DisplayNameFor(model => model.Category)</th>
+            <th>@Html.DisplayNameFor(model => model.OnSale)</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -53,7 +47,8 @@
                 </div>
             </td>
             <td></td>
-            <td></td> <!-- Empty cell for Actions -->
+            <td></td>
+            <td></td>
         </tr>
         @foreach (var item in Model)
         {
@@ -68,9 +63,7 @@
                         <span>No image</span>
                     }
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>
                     @if (item.OnSale)
                     {
@@ -81,12 +74,8 @@
                         @item.Price.ToString("C")
                     }
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OnSale)
-                </td>
+                <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                <td>@Html.DisplayFor(modelItem => item.OnSale)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Item_ID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Item_ID">Details</a> |

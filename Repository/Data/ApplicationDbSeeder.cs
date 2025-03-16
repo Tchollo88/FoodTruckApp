@@ -29,6 +29,7 @@ public class ApplicationDbSeeder
             new Item { Name = "Pixie Puffs", Price = 3.99m, Category = "Dessert", Description = "Fried cream cheese custerd breaded in dried mushroom flakes served with candied blueberry", OnSale = false },
             new Item { Name = "Spore Born Skewers", Price = 4.99m, Category = "Appetizer", Description = "Rosemarry kebabed mushrooms grilled with a teriyaki glaze", OnSale = false },
             new Item { Name = "Burger", Price = 5.99m, Category = "Main Course", Description = "Delicious burger", OnSale = false },
+            new Item { Name = "Burger", Price = 5.99m, Category = "Main Course", Description = "Delicious burger", OnSale = false},
             new Item { Name = "Pizza", Price = 7.99m, Category = "Main Course", Description = "Cheesy pizza", OnSale = false },
             new Item { Name = "Fries", Price = 3.49m, Category = "Side", Description = "Crispy fries", OnSale = true }
         };
