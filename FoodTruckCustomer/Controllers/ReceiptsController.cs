@@ -25,9 +25,10 @@ namespace FoodTruckCustomer.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Checkout(int orderID)
+        public async Task<IActionResult> Checkout(int orderID, int receiptID)
         {
             ViewBag.param = orderID;
+            ViewBag.param2 = receiptID;
             var order = await _CustomerRepo.GetOrderByIdAsync(orderID);
             if (order == null)
             {
@@ -40,14 +41,25 @@ namespace FoodTruckCustomer.Controllers
                 Order = order,
                 Date = DateTime.UtcNow
             };
+            if (receiptID != 0)
+            {
+                receipt = await _CustomerRepo.GetReceiptByIdAsync(receiptID);
+                await _CustomerRepo.AddReceiptAsync(receipt);
+                if (receipt == null)
+                {
+                    return NotFound();
+                }
+            }
 
             return View(receipt);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckoutConfirmed(int orderID)
+        public async Task<IActionResult> CheckoutConfirmed(int orderID, int receiptID)
         {
             ViewBag.param = orderID;
+            ViewBag.param2 = orderID;
+
             var order = await _CustomerRepo.GetOrderByIdAsync(orderID);
             if (order == null)
             {
@@ -61,7 +73,7 @@ namespace FoodTruckCustomer.Controllers
                 Date = DateTime.UtcNow
             };
 
-            return RedirectToAction("Checkout", "Receipts", new { orderID = orderID });
+            return RedirectToAction("Checkout", "Receipts", new { orderID = orderID, receiptID = receiptID});
         }
 
     }

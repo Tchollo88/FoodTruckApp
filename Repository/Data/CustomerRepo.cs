@@ -91,6 +91,14 @@ namespace Repository.Data
                 FirstOrDefaultAsync();
         }
 
+        public async Task<Receipt> GetReceiptByIdAsync(int id)
+        {
+            return await _context.Receipts.
+                Where(r => r.Receipt_ID == id).
+                Include(o => o.Order).
+                FirstOrDefaultAsync();
+        }
+
         public async Task AddReceiptAsync(Receipt receipt)
         {
             _context.Receipts.Add(receipt);
