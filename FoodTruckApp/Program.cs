@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Repository.Data;
@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure Database Connection
+// ✅ Configure Database Connection
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -24,7 +24,7 @@ builder.Services.AddTransient<ApplicationDbSeeder>(); // Register the seeder as 
 
 var app = builder.Build();
 
-// Enables serving static files (needed for images)
+// ✅ Ensure static files (images, CSS, JS) are properly served
 app.UseStaticFiles();
 
 if (app.Environment.IsDevelopment())
@@ -39,51 +39,52 @@ else
 app.UseRouting();
 app.UseAuthorization();
 
+// ✅ Ensure default route is properly mapped
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 
-// Migrate database, create roles, and seed data
+// ✅ Database Migration, Role Creation, and Seeding (Improved)
 using (var scope = app.Services.CreateScope())
 {
-    await CreateRoles(app.Services); // Your existing role creation
+    var services = scope.ServiceProvider;
+    await CreateRoles(services);
 
-    var seeder = scope.ServiceProvider.GetRequiredService<ApplicationDbSeeder>();
+    var seeder = services.GetRequiredService<ApplicationDbSeeder>();
     await seeder.SeedAsync(); // Seed the database with sample data
 }
 
 app.Run();
 
+// ✅ Improved Role Creation Method
 async Task CreateRoles(IServiceProvider serviceProvider)
 {
-    using (var scope = serviceProvider.CreateScope())
+    using var scope = serviceProvider.CreateScope();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+    string[] roleNames = { "Admin", "User" };
+
+    foreach (var roleName in roleNames)
     {
-        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-        string[] roleNames = { "Admin", "User" };
-
-        foreach (var roleName in roleNames)
+        if (!await roleManager.RoleExistsAsync(roleName))
         {
-            if (!await roleManager.RoleExistsAsync(roleName))
-            {
-                await roleManager.CreateAsync(new IdentityRole(roleName));
-            }
+            await roleManager.CreateAsync(new IdentityRole(roleName));
         }
+    }
 
-        // Create an admin user if one does not exist
-        string adminEmail = "admin@demo.com";
-        string adminPassword = "Admin@123";
-        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    // ✅ Create an admin user if one does not exist
+    string adminEmail = "admin@demo.com";
+    string adminPassword = "Admin@123";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
-        if (adminUser == null)
-        {
-            adminUser = new IdentityUser { UserName = adminEmail, Email = adminEmail };
-            adminUser.EmailConfirmed = true;
-            await userManager.CreateAsync(adminUser, adminPassword);
-            await userManager.AddToRoleAsync(adminUser, "Admin");
-            await userManager.AddClaimAsync(adminUser, new Claim("Department", "Owner"));
-        }
+    if (adminUser == null)
+    {
+        adminUser = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+        await userManager.CreateAsync(adminUser, adminPassword);
+        await userManager.AddToRoleAsync(adminUser, "Admin");
+        await userManager.AddClaimAsync(adminUser, new Claim("Department", "Owner"));
     }
 }
