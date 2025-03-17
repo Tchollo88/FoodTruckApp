@@ -13,6 +13,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -28,11 +29,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.OnSale).Insert(2, " ")
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <td></td>
             <td>
                 <div class="col-md-6">
                     <form asp-action="NameSearch" method="get" class="form-control">
@@ -54,6 +55,16 @@
         </tr>
 @foreach (var item in Model.Where(i => i.Name.ToLower().Contains(ViewBag.param.ToLower()))) {
         <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(item.Image))
+                {
+                    <img src="~/menu/images/@item.Image" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
+                }
+                else
+                {
+                    <span>No image</span>
+                }
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
